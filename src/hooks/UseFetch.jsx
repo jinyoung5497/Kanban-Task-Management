@@ -39,6 +39,7 @@ export const FetchProvider = ({ children }) => {
   const [mainBoard, setMainBoard] = useState([])
   const [testToggle, setTestToggle] = useState(false)
   const [subtaskToggle, setSubtaskToggle] = useState(false)
+  const [subtaskData, setSubtaskData] = useState([])
 
   const [updateToggle, setUpdateToggle] = useState(false)
   const initRender = useRef(false)
@@ -85,12 +86,6 @@ export const FetchProvider = ({ children }) => {
       fetch(`http://localhost:4000/api/boards/${'645730237aace50e6a6193b0'}`)
         .then((res) => res.json())
         .then((data) => {
-          // console.log(data[boardIndex].columns.map((value) => value.tasks));
-          // console.log(
-          //   data[boardIndex].columns.map((value) =>
-          //     value.tasks.map((value) => value.subtasks)
-          //   )
-          // )
           setColumnArray(
             data[boardIndex].columns.map((value, index) => (
               <div key={index} className='mr-2 '>
@@ -135,6 +130,7 @@ export const FetchProvider = ({ children }) => {
       setDataIsCompleted(
         data[boardIndex].columns[columnIndex].tasks[taskIndex].subtasks
       )
+      console.log(boardIndex, columnIndex, taskIndex)
       console.log(
         data[boardIndex].columns[columnIndex].tasks[taskIndex].subtasks
       )
@@ -295,6 +291,8 @@ export const FetchProvider = ({ children }) => {
         setMainBoard,
         mainBoard,
         setSubtaskToggle,
+        setSubtaskData,
+        subtaskData,
       }}
     >
       {children}

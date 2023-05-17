@@ -10,6 +10,7 @@ export default function MainBoard() {
     fetch.setTaskTitle(value.title)
     fetch.setTaskDescription(value.description)
     fetch.setTaskStatus(value.status)
+    fetch.setSubtaskData(value.subtasks)
   }
 
   const handleColumnIndex = (index) => {
