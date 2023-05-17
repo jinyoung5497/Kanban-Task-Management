@@ -37,6 +37,8 @@ export const FetchProvider = ({ children }) => {
   const [data, setData] = useState([])
   const [dataIsCompleted, setDataIsCompleted] = useState([])
   const [mainBoard, setMainBoard] = useState([])
+  const [testToggle, setTestToggle] = useState(false)
+  const [subtaskToggle, setSubtaskToggle] = useState(false)
 
   const [updateToggle, setUpdateToggle] = useState(false)
   const initRender = useRef(false)
@@ -47,9 +49,10 @@ export const FetchProvider = ({ children }) => {
   const initColumnId = useRef(false)
   const initSubtaskId = useRef(false)
   const initData = useRef(false)
+  const initDataUpdate = useRef(false)
 
   const getBoards = useEffect(() => {
-    fetch(`http://localhost:4000/api/boards/data/${'645730237aace50e6a6193b0'}`)
+    fetch(`http://localhost:4000/api/boards/data/645730237aace50e6a6193b0`)
       .then((res) => res.json())
       .then((data) => {
         setData(data.boards)
@@ -62,11 +65,11 @@ export const FetchProvider = ({ children }) => {
 
   useEffect(() => {
     if (initData.current) {
-      console.log(data[boardIndex])
+      setMainBoard(data[boardIndex].columns)
     } else {
       initData.current = true
     }
-  }, [data])
+  }, [data, boardIndex])
 
   const getBoardName = useEffect(() => {
     if (initBoardName.current) {
@@ -76,14 +79,6 @@ export const FetchProvider = ({ children }) => {
       initBoardName.current = true
     }
   }, [boardIndex])
-
-  const getColumnId = useEffect(() => {
-    if (initColumnId.current) {
-      setColumnId(columnName[columnIndex]._id)
-    } else {
-      initColumnId.current = true
-    }
-  }, [columnIndex])
 
   const getColumns = useEffect(() => {
     if (initRender.current) {
@@ -95,7 +90,7 @@ export const FetchProvider = ({ children }) => {
           //   data[boardIndex].columns.map((value) =>
           //     value.tasks.map((value) => value.subtasks)
           //   )
-          // );
+          // )
           setColumnArray(
             data[boardIndex].columns.map((value, index) => (
               <div key={index} className='mr-2 '>
@@ -117,6 +112,14 @@ export const FetchProvider = ({ children }) => {
     }
   }, [boardIndex])
 
+  const getColumnId = useEffect(() => {
+    if (initColumnId.current) {
+      setColumnId(columnName[columnIndex]._id)
+    } else {
+      initColumnId.current = true
+    }
+  }, [columnIndex])
+
   const getSubtasks = useEffect(() => {
     if (initTest.current) {
       setSubtaskTitle(
@@ -129,7 +132,12 @@ export const FetchProvider = ({ children }) => {
         subTaskArray[columnIndex][taskIndex].map((value) => value.isCompleted)
       )
       setTaskId(columnName[columnIndex].tasks[taskIndex]._id)
-      setDataIsCompleted(data[boardIndex].columns[columnIndex].tasks)
+      setDataIsCompleted(
+        data[boardIndex].columns[columnIndex].tasks[taskIndex].subtasks
+      )
+      console.log(
+        data[boardIndex].columns[columnIndex].tasks[taskIndex].subtasks
+      )
     } else {
       initTest.current = true
     }
@@ -140,42 +148,62 @@ export const FetchProvider = ({ children }) => {
       setSubtaskId(
         columnName[columnIndex].tasks[taskIndex].subtasks[subtaskIndex]._id
       )
-      setSubtaskIsCompleted(
-        data[boardIndex].columns[columnIndex].tasks[taskIndex].subtasks[
-          subtaskIndex
-        ].isCompleted
-      )
-
-      // console.log(boardIndex, columnIndex, taskIndex, subtaskIndex)
-      // console.log(
-      //   data[boardIndex].columns[columnIndex].tasks[taskIndex].subtasks[
-      //     subtaskIndex
-      //   ].isCompleted
-      // )
+      setSubtaskIsCompleted((prev) => !prev)
     } else {
       initSubtaskId.current = true
     }
-  }, [subtaskIndex])
+  }, [subtaskToggle])
 
   useEffect(() => {
     if (initUpdate.current) {
-      console.log(subtaskIsCompleted)
       setData((prev) => {
         const newArray = [...prev]
         newArray[boardIndex].columns[columnIndex].tasks[taskIndex].subtasks[
           subtaskIndex
-        ].isCompleted = setSubtaskIsCompleted((prev) => !prev)
+        ].isCompleted = subtaskIsCompleted
         return newArray
       })
-      console.log(
-        data[boardIndex].columns[columnIndex].tasks[taskIndex].subtasks[
-          subtaskIndex
-        ]
-      )
+      setTestToggle((prev) => !prev)
     } else {
       initUpdate.current = true
     }
-  }, [subtaskId])
+  }, [subtaskIsCompleted])
+
+  useEffect(() => {
+    if (initUpdateTasks.current) {
+      console.log(data)
+      fetch(
+        'http://localhost:4000/api/boards/newboard/645730237aace50e6a6193af',
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            boards: data,
+          }),
+        }
+      )
+        .then((res) => {
+          return res.json()
+        })
+        .then((data) => {
+          console.log(data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    } else {
+      initUpdateTasks.current = true
+    }
+  }, [testToggle])
+
+  const updateData = useEffect(() => {
+    if (initDataUpdate.current) {
+    } else {
+      initDataUpdate.current = true
+    }
+  }, [data])
 
   // const updateSubtaskField = useEffect(() => {
   //   // console.log(boardId)
@@ -264,6 +292,9 @@ export const FetchProvider = ({ children }) => {
         updateIsCompleted,
         dataIsCompleted,
         setDataIsCompleted,
+        setMainBoard,
+        mainBoard,
+        setSubtaskToggle,
       }}
     >
       {children}

@@ -22,7 +22,7 @@ export default function MainBoard() {
     <>
       <div className='h-screen z-30'>
         <div className={`w-full h-full px-10 pt-5 bg-linen flex`}>
-          {fetch.columnName.map((value, index) => {
+          {fetch.mainBoard.map((value, index) => {
             return (
               <div
                 key={index}
@@ -43,7 +43,12 @@ export default function MainBoard() {
                       >
                         <div className='font-bold mb-2'>{value.title}</div>
                         <p className='text-sm text-gray-light'>
-                          0 out of {fetch.dataIsCompleted[0]} subtasks
+                          {
+                            value.subtasks.filter(
+                              (value) => value.isCompleted == true
+                            ).length
+                          }{' '}
+                          out of {value.subtasks.length} subtasks
                         </p>
                       </div>
                     )

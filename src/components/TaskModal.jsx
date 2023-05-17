@@ -35,6 +35,8 @@ export default function TaskModal() {
 
   const subtaskBoolean = (value, index) => {
     fetch.setSubtaskIndex(index)
+    fetch.setSubtaskIsCompleted(fetch.dataIsCompleted[index].isCompleted)
+    fetch.setSubtaskToggle((prev) => !prev)
     // console.log(!fetch.subtaskComplete[index])
     // fetch.setSubtaskIsCompleted((prev) => !prev)
   }
@@ -52,7 +54,12 @@ export default function TaskModal() {
           </p>
           {/* <p>{fetch.taskStatus}</p> */}
           <p className='text-[13px] text-gray-light font-bold mb-3'>
-            Subtasks ({} of {fetch.subtaskTitle.length})
+            Subtasks (
+            {
+              fetch.dataIsCompleted.filter((value) => value.isCompleted == true)
+                .length
+            }{' '}
+            of {fetch.subtaskTitle.length})
           </p>
           {fetch.subtaskTitleArray.map((value, index) => (
             <div
@@ -62,7 +69,7 @@ export default function TaskModal() {
             >
               <div
                 className={`w-4 h-4 rounded-sm mr-4 flex justify-center ${
-                  index == fetch.subtaskIndex && fetch.subtaskIsCompleted
+                  fetch.dataIsCompleted[index].isCompleted
                     ? 'bg-purple'
                     : 'bg-white'
                 }`}
@@ -71,7 +78,7 @@ export default function TaskModal() {
                   src={icon3}
                   alt='check icon'
                   className={`w-3 h-3 self-center ${
-                    index == fetch.subtaskIndex && fetch.subtaskIsCompleted
+                    fetch.dataIsCompleted[index].isCompleted
                       ? 'block'
                       : 'hidden'
                   }`}

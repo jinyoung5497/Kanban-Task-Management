@@ -1,10 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useFetch } from '../hooks/UseFetch'
 import { icon12, icon11 } from '../assets'
 
 export default function Navbar() {
   const fetch = useFetch()
   const [openOption, setOpenOption] = useState(false)
+  const modalRef = useRef()
+
+  const handleOutsideClick = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      setOpenOption(false)
+    }
+  }
+
+  useEffect(() => {
+    if (openOption) {
+      document.addEventListener('mousedown', handleOutsideClick)
+    } else {
+      document.removeEventListener('mousedown', handleOutsideClick)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick)
+    }
+  }, [openOption])
 
   const getOption = () => {}
   return (
@@ -12,20 +31,21 @@ export default function Navbar() {
       <div className='border-r-[1px] border-gray-bright w-[300px] h-[100px] flex items-center pl-8'>
         <img src={icon12} alt='Main logo' />
       </div>
-      <div className='ml-5 text-xl font-bold'>{fetch.boardName}</div>
-      <button className='ml-auto bg-purple p-3 px-5 text-white rounded-full mr-8 hover:bg-purple-light'>
+      <div className='ml-5 text-xl font-bold'>{fetch.mainBoard.name}</div>
+      <button className='ml-auto bg-purple p-3 px-5 text-white rounded-full hover:bg-purple-light'>
         + Add New Task
       </button>
-      <img
-        src={icon11}
-        alt='option logo'
-        className='mr-8 cursor-pointer'
+      <div
+        className='flex items-center justify-center w-10 h-10 mr-4 ml-2 cursor-pointer'
         onClick={() => setOpenOption((prev) => !prev)}
-      />
+      >
+        <img src={icon11} alt='option logo' />
+      </div>
       <div
         className={`flex flex-col bg-white absolute p-4 rounded-xl text-md w-48 items-start top-20 right-8 z-10 drop-shadow-md gap-y-3 ${
           openOption ? 'block' : 'hidden'
         }`}
+        ref={modalRef}
       >
         <button className='text-gray-light hover:text-purple'>
           Edit Board
