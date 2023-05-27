@@ -7,12 +7,6 @@ export default function Navbar() {
   const [openOption, setOpenOption] = useState(false)
   const modalRef = useRef()
 
-  const handleOutsideClick = (e) => {
-    if (modalRef.current && !modalRef.current.contains(e.target)) {
-      setOpenOption(false)
-    }
-  }
-
   useEffect(() => {
     if (openOption) {
       document.addEventListener('mousedown', handleOutsideClick)
@@ -25,13 +19,27 @@ export default function Navbar() {
     }
   }, [openOption])
 
-  const getOption = () => {}
+  const handleOutsideClick = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      setOpenOption(false)
+    }
+  }
+
+  const openEditModal = () => {
+    setOpenOption(false)
+  }
+
+  const openDeleteModal = () => {
+    fetch.setDeleteBoardModalDisplay(true)
+    setOpenOption(false)
+  }
+
   return (
-    <div className='flex items-center border-b-[1px] border-gray-bright'>
+    <div className='-z-10 flex bg-white items-center border-b-[1px] border-gray-bright'>
       <div className='border-r-[1px] border-gray-bright w-[300px] h-[100px] flex items-center pl-8'>
         <img src={icon12} alt='Main logo' />
       </div>
-      <div className='ml-5 text-xl font-bold'>{fetch.mainBoard.name}</div>
+      <div className='ml-5 text-xl font-bold'>{fetch.boardName}</div>
       <button className='ml-auto bg-purple p-3 px-5 text-white rounded-full hover:bg-purple-light'>
         + Add New Task
       </button>
@@ -41,16 +49,25 @@ export default function Navbar() {
       >
         <img src={icon11} alt='option logo' />
       </div>
+
+      {/* OPTION MODAL */}
       <div
-        className={`flex flex-col bg-white absolute p-4 rounded-xl text-md w-48 items-start top-20 right-8 z-10 drop-shadow-md gap-y-3 ${
+        className={`flex flex-col bg-white absolute p-4 rounded-xl text-md w-48  items-start top-20 right-8 z-50 drop-shadow-md gap-y-3 ${
           openOption ? 'block' : 'hidden'
         }`}
-        ref={modalRef}
       >
-        <button className='text-gray-light hover:text-purple'>
+        <button
+          className='text-gray-light hover:text-purple'
+          onClick={openEditModal}
+        >
           Edit Board
         </button>
-        <button className='text-red hover:text-red-light'>Delete Board</button>
+        <button
+          className='text-red hover:text-red-light'
+          onClick={openDeleteModal}
+        >
+          Delete Board
+        </button>
       </div>
     </div>
   )

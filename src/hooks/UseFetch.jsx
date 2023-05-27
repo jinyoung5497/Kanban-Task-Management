@@ -40,6 +40,15 @@ export const FetchProvider = ({ children }) => {
   const [testToggle, setTestToggle] = useState(false)
   const [subtaskToggle, setSubtaskToggle] = useState(false)
   const [subtaskData, setSubtaskData] = useState([])
+  const [task, setTask] = useState([])
+  const [toggleNewBoard, setToggleNewBoard] = useState(false)
+  const [toggleNewColumn, setToggleNewColumn] = useState(false)
+  const [name, setName] = useState('')
+  const [nameArray, setNameArray] = useState(['Todo', 'Doing', 'Done'])
+  const [newColumnId, setNewColumnId] = useState('')
+  const [toggleColumnId, setToggleColumnId] = useState(false)
+  const [newBoardModalDisplay, setNewBoardModalDisplay] = useState(false)
+  const [deleteBoardModalDisplay, setDeleteBoardModalDisplay] = useState(false)
 
   const [updateToggle, setUpdateToggle] = useState(false)
   const initRender = useRef(false)
@@ -51,6 +60,9 @@ export const FetchProvider = ({ children }) => {
   const initSubtaskId = useRef(false)
   const initData = useRef(false)
   const initDataUpdate = useRef(false)
+  const initNewBoard = useRef(false)
+  const initNewColumn = useRef(false)
+  const initNewColumnId = useRef(false)
 
   const getBoards = useEffect(() => {
     fetch(`http://localhost:4000/api/boards/data/645730237aace50e6a6193b0`)
@@ -67,6 +79,8 @@ export const FetchProvider = ({ children }) => {
   useEffect(() => {
     if (initData.current) {
       setMainBoard(data[boardIndex].columns)
+      console.log(data[boardIndex].name)
+      console.log(data)
     } else {
       initData.current = true
     }
@@ -165,7 +179,7 @@ export const FetchProvider = ({ children }) => {
     }
   }, [subtaskIsCompleted])
 
-  useEffect(() => {
+  const postData = useEffect(() => {
     if (initUpdateTasks.current) {
       console.log(data)
       fetch(
@@ -201,42 +215,21 @@ export const FetchProvider = ({ children }) => {
     }
   }, [data])
 
-  // const updateSubtaskField = useEffect(() => {
-  //   // console.log(boardId)
-  //   // console.log(columnId)
-  //   // console.log(taskId)
-  //   // console.log(subtaskId)
-  //   if (initSubtaskUpdate.current) {
-  //     fetch(
-  //       `http://localhost:4000/api/boards/tasks/${boardId}/${columnId}/${taskId}/${subtaskId}`,
-  //       {
-  //         method: 'PATCH',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify(
-  //           {
-  //             'boards.$[].columns.$[].tasks.$[].subtasks.$[].isCompleted': `false`,
-  //           },
-  //           {
-  //             arrayFilters: [{ 'subtask._id': subtaskId }],
-  //           }
-  //         ),
-  //       }
-  //     )
-  //       .then((res) => {
-  //         return res.json()
-  //       })
-  //       .then((data) => {
-  //         console.log(data)
-  //       })
-  //       .catch((error) => {
-  //         console.log(error)
-  //       })
-  //   } else {
-  //     initSubtaskUpdate.current = true
-  //   }
-  // }, [subtaskIsCompleted])
+  const addNewBoard = useEffect(() => {
+    if (initNewBoard.current) {
+      const newData = [...data]
+      newData.push({
+        name: name,
+        columns: nameArray.map((value) => ({
+          name: value,
+        })),
+      })
+      setData(newData)
+      setTestToggle((prev) => !prev)
+    } else {
+      initNewBoard.current = true
+    }
+  }, [toggleNewBoard])
 
   return (
     <FetchContext.Provider
@@ -246,7 +239,6 @@ export const FetchProvider = ({ children }) => {
         setModalDisplay,
         setTaskTitle,
         setBoardIndex,
-        setUpdateToggle,
         taskTitle,
         taskDescription,
         setTaskDescription,
@@ -293,6 +285,16 @@ export const FetchProvider = ({ children }) => {
         setSubtaskToggle,
         setSubtaskData,
         subtaskData,
+        setTask,
+        task,
+        setToggleNewBoard,
+        setName,
+        setNameArray,
+        nameArray,
+        setNewBoardModalDisplay,
+        newBoardModalDisplay,
+        setDeleteBoardModalDisplay,
+        deleteBoardModalDisplay,
       }}
     >
       {children}

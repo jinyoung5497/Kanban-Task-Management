@@ -43,12 +43,16 @@ export default function Sidebar() {
     index == fetch.boardIndex && setHoverState(false)
   }
 
-  const createBoard = () => {}
+  const createBoard = () => {
+    fetch.setNewBoardModalDisplay(true)
+  }
 
   return (
     <>
       <div
-        className={`w-[300px] bg-white h-screen flex flex-col border-r-[1px] border-gray-bright transform transition duration-500 ease-in-out`}
+        className={`fixed w-[300px] bg-white h-screen flex flex-col border-r-[1px] border-gray-bright transform transition duration-500 ease-in-out ${
+          fetch.showSidebar ? '-translate-x-96' : '-translate-x-0'
+        }`}
       >
         <div className='flex flex-col'>
           <img src={icon12} alt='logo' className='mb-14 w-40 m-8' />
@@ -96,33 +100,41 @@ export default function Sidebar() {
             + Create New Board
           </div>
         </div>
-        <div className='flex items-center  bg-linen p-3 place-content-around mx-5 rounded-md px-14 mt-auto mb-2'>
-          <img src={icon9} alt='icon light' />
+
+        <div className='mx-2 mt-auto mb-10'>
+          {/* --------DARK MODE TOGGLE------- */}
+          <div className='flex items-center bg-linen p-3 place-content-around rounded-md px-14 w-full mb-3'>
+            <img src={icon9} alt='icon light' />
+            <div
+              className={`w-10 h-5 bg-purple rounded-full flex items-center cursor-pointer hover:bg-purple-light ${
+                fetch.darkMode && 'justify-end'
+              }`}
+              onClick={toggleDarkMode}
+            >
+              <section className='w-[14px] h-[14px] bg-white rounded-full mx-1 '></section>
+            </div>
+            <img src={icon7} alt='icon night' />
+          </div>
+
+          {/* ---------HIDE SIDEBAR TOGGLE--------- */}
           <div
-            className={`w-10 h-5 bg-purple rounded-full flex items-center cursor-pointer hover:bg-purple-light ${
-              fetch.darkMode && 'justify-end'
-            }`}
-            onClick={toggleDarkMode}
+            className='flex items-center ml-0 cursor-pointer rounded-r-full mr-5 w-full hover:bg-gray-100 hover:text-purple text-gray-light'
+            onClick={hideSidebar}
+            onMouseEnter={() => setHideSidebarColour('#635FC7')}
+            onMouseLeave={() => setHideSidebarColour('#828FA3')}
           >
-            <section className='w-[14px] h-[14px] bg-white rounded-full mx-1 '></section>
+            <div className='mx-6'>
+              <EyeHide colour={hideSidebarColour} />
+            </div>
+            <p className=' font-bold text-md my-4 '>Hide Sidebar</p>
           </div>
-          <img src={icon7} alt='icon night' />
-        </div>
-        <div
-          className='flex items-center mb-8 cursor-pointer rounded-r-full mr-5 hover:bg-gray-100 hover:text-purple text-gray-light'
-          onClick={hideSidebar}
-          onMouseEnter={() => setHideSidebarColour('#635FC7')}
-          onMouseLeave={() => setHideSidebarColour('#828FA3')}
-        >
-          <div className='mx-6'>
-            <EyeHide colour={hideSidebarColour} />
-          </div>
-          <p className=' font-bold text-md my-4 '>Hide Sidebar</p>
         </div>
       </div>
+
+      {/* --------HIDE SIDEBAR TOGGLE--------- */}
       <div
-        className={`bg-purple cursor-pointer w-fit p-5 pr-7 rounded-r-full sticky  bottom-20 transform transition duration-500 ease-in-out ${
-          fetch.showSidebar ? 'translate-x-96' : '-translate-x-16'
+        className={`bg-purple z-50 h-fit cursor-pointer w-fit p-5 pr-7 rounded-r-full fixed bottom-20 transform transition duration-500 ease-in-out ${
+          fetch.showSidebar ? 'translate-x-0' : '-translate-x-20'
         }`}
         onClick={hideSidebar}
       >

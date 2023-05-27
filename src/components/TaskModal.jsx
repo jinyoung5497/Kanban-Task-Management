@@ -6,6 +6,8 @@ export default function TaskModal() {
   const fetch = useFetch()
   const modalRef = useRef()
   const [openOption, setOpenOption] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [dropdownTitle, setDropdownTitle] = useState(fetch.subtaskStatus)
 
   const handleChange = (event) => {
     fetch.setHandleSelected(event.target.value == fetch.taskStatus)
@@ -13,12 +15,6 @@ export default function TaskModal() {
 
   const handleDisplayModal = () => {
     fetch.setHandleDisplayModal(true)
-  }
-
-  const handleOutsideClick = (e) => {
-    if (modalRef.current && !modalRef.current.contains(e.target)) {
-      fetch.setModalDisplay(false)
-    }
   }
 
   useEffect(() => {
@@ -33,23 +29,37 @@ export default function TaskModal() {
     }
   }, [fetch.modalDisplay])
 
+  const handleOutsideClick = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      fetch.setModalDisplay(false)
+    }
+  }
+
   const subtaskBoolean = (value, index) => {
     fetch.setSubtaskIndex(index)
     fetch.setSubtaskIsCompleted(fetch.subtaskData[index].isCompleted)
     fetch.setSubtaskToggle((prev) => !prev)
   }
 
+  const handleDropdown = (title) => {
+    setDropdownOpen(false)
+    setDropdownTitle(title)
+  }
+
   return (
     <>
       <div className='bg-[#6b6b6b77] w-screen h-screen flex items-center justify-center'>
-        <div className='bg-white w-[500px] p-8 rounded-lg' ref={modalRef}>
+        <div
+          className='bg-white w-[500px] p-8 rounded-lg absolute'
+          ref={modalRef}
+        >
           <div className='flex items-center mb-5'>
             <h1 className='text-lg font-extrabold'>{fetch.taskTitle}</h1>
             <div
               className='w-8 h-8 ml-auto flex items-center justify-center cursor-pointer flex-col '
               onClick={() => setOpenOption((prev) => !prev)}
             >
-              <img src={icon11} alt='option icon' className='fixed' />
+              <img src={icon11} alt='option icon' className='' />
               <div
                 className={`${
                   openOption ? 'block' : 'hidden'
@@ -98,21 +108,31 @@ export default function TaskModal() {
           <p className='text-gray-light text-sm mb-2 font-bold'>
             Current Status
           </p>
-          <select
-            defaultValue={fetch.taskStatus}
-            className='border-[1px] border-purple w-full p-2 rounded-sm'
-          >
-            {fetch.columnName.map((value, index) => (
-              <option
-                key={index}
-                value={value.name}
-                onChange={handleChange}
-                className='text-gray-light text-md '
-              >
-                {value.name}
-              </option>
-            ))}
-          </select>
+          <div>
+            <input
+              type='text'
+              value={dropdownTitle}
+              defaultValue={fetch.taskStatus}
+              readOnly
+              onClick={() => setDropdownOpen(true)}
+              className='w-full border-[1px] border-gray-bright p-2 rounded-md'
+            />
+            {dropdownOpen && (
+              <ul className='relative p-3 rounded-md'>
+                {fetch.mainBoard.map((value, index) => {
+                  return (
+                    <li
+                      key={index}
+                      onClick={() => handleDropdown(value.name)}
+                      className='mb-1 text-gray-light'
+                    >
+                      {value.name}
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+          </div>
         </div>
       </div>
     </>

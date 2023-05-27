@@ -21,7 +21,11 @@ export default function MainBoard() {
 
   return (
     <>
-      <div className='h-screen z-30'>
+      <div
+        className={`-z-10 mt-[101px] h-screen transform transition duration-500 ease-in-out ${
+          fetch.showSidebar ? '-translate-x-0' : 'translate-x-[300px]'
+        }`}
+      >
         <div className={`w-full h-full px-10 pt-5 bg-linen flex`}>
           {fetch.mainBoard.map((value, index) => {
             return (
@@ -32,28 +36,31 @@ export default function MainBoard() {
               >
                 <div className='ml-4 flex items-center text-gray-light text-sm font-bold tracking-[2px]'>
                   <section className='w-4 h-4 bg-teal-400 rounded-full mr-2'></section>
-                  {value.name.toUpperCase()} ({value.tasks.length})
+                  {value.name.toUpperCase()} (
+                  {value.tasks ? value.tasks.length : 0})
                 </div>
                 <div className=''>
-                  {value.tasks.map((value, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className='bg-white m-4 p-5 rounded-xl drop-shadow-md cursor-pointer hover:text-purple'
-                        onClick={() => getTasks(value, index)}
-                      >
-                        <div className='font-bold mb-2'>{value.title}</div>
-                        <p className='text-sm text-gray-light'>
-                          {
-                            value.subtasks.filter(
-                              (value) => value.isCompleted == true
-                            ).length
-                          }{' '}
-                          out of {value.subtasks.length} subtasks
-                        </p>
-                      </div>
-                    )
-                  })}
+                  {value.tasks
+                    ? value.tasks.map((value, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className='bg-white m-4 p-5 rounded-xl drop-shadow-md cursor-pointer hover:text-purple'
+                            onClick={() => getTasks(value, index)}
+                          >
+                            <div className='font-bold mb-2'>{value.title}</div>
+                            <p className='text-sm text-gray-light'>
+                              {
+                                value.subtasks.filter(
+                                  (value) => value.isCompleted == true
+                                ).length
+                              }{' '}
+                              out of {value.subtasks.length} subtasks
+                            </p>
+                          </div>
+                        )
+                      })
+                    : ''}
                 </div>
               </div>
             )
