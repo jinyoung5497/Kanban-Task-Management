@@ -50,7 +50,7 @@ export default function Sidebar() {
   return (
     <>
       <div
-        className={`fixed w-[300px] bg-white h-screen flex flex-col border-r-[1px] border-gray-bright transform transition duration-500 ease-in-out ${
+        className={`z-20 fixed top-0 w-[300px] bg-white h-screen flex flex-col border-r-[1px] border-gray-bright transform transition duration-500 ease-in-out ${
           fetch.showSidebar ? '-translate-x-96' : '-translate-x-0'
         }`}
       >

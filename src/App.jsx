@@ -18,20 +18,24 @@ export default function App() {
   return (
     <>
       <div>
-        <div className='fixed w-full'>
-          <Navbar />
-        </div>
-        <section className='flex'>
-          <Sidebar />
-          <MainBoard />
-        </section>
+        <Navbar />
+        <Sidebar />
+        <MainBoard />
       </div>
-      <div className='fixed top-0'>{fetch.modalDisplay && <TaskModal />}</div>
-      <div className='fixed top-0'>
+      <div className='fixed top-0 z-20'>
+        {fetch.modalDisplay && <TaskModal />}
+      </div>
+      <div className='fixed top-0 z-20'>
         <AddBoard />
       </div>
-      <div className='fixed top-0'>
+      <div className='fixed top-0 z-20'>
         <DeleteBoard />
+      </div>
+      <div className='fixed top-0 z-20'>
+        <EditBoard />
+      </div>
+      <div className='fixed top-0 z-20'>
+        <AddTask />
       </div>
     </>
   )

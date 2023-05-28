@@ -22,10 +22,10 @@ export default function AddBoard() {
   }
 
   const createNewBoard = () => {
-    console.log(fetch.name)
-    console.log(fetch.nameArray)
-    // console.log(fetch.data)
+    // console.log(fetch.name)
+    // console.log(fetch.nameArray)
     fetch.setToggleNewBoard((prev) => !prev)
+    fetch.setNewBoardModalDisplay(false)
   }
 
   useEffect(() => {

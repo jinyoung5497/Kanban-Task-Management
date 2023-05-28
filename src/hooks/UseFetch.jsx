@@ -37,7 +37,6 @@ export const FetchProvider = ({ children }) => {
   const [data, setData] = useState([])
   const [dataIsCompleted, setDataIsCompleted] = useState([])
   const [mainBoard, setMainBoard] = useState([])
-  const [testToggle, setTestToggle] = useState(false)
   const [subtaskToggle, setSubtaskToggle] = useState(false)
   const [subtaskData, setSubtaskData] = useState([])
   const [task, setTask] = useState([])
@@ -49,8 +48,11 @@ export const FetchProvider = ({ children }) => {
   const [toggleColumnId, setToggleColumnId] = useState(false)
   const [newBoardModalDisplay, setNewBoardModalDisplay] = useState(false)
   const [deleteBoardModalDisplay, setDeleteBoardModalDisplay] = useState(false)
-
+  const [editBoardModalDisplay, setEditBoardModalDisplay] = useState(false)
+  const [addTaskModalDisplay, setAddTaskModalDisplay] = useState(false)
   const [updateToggle, setUpdateToggle] = useState(false)
+  const [dropStatus, setDropStatus] = useState('')
+
   const initRender = useRef(false)
   const initUpdate = useRef(false)
   const initUpdateTasks = useRef(false)
@@ -79,16 +81,15 @@ export const FetchProvider = ({ children }) => {
   useEffect(() => {
     if (initData.current) {
       setMainBoard(data[boardIndex].columns)
-      console.log(data[boardIndex].name)
-      console.log(data)
+      setBoardName(data[boardIndex].name)
+      setDropStatus(data[boardIndex].columns[0].name)
     } else {
       initData.current = true
     }
-  }, [data, boardIndex])
+  }, [boardIndex])
 
   const getBoardName = useEffect(() => {
     if (initBoardName.current) {
-      setBoardName(data[boardIndex].name)
       setBoardId(data[boardIndex]._id)
     } else {
       initBoardName.current = true
@@ -129,35 +130,35 @@ export const FetchProvider = ({ children }) => {
     }
   }, [columnIndex])
 
-  const getSubtasks = useEffect(() => {
-    if (initTest.current) {
-      setSubtaskTitle(
-        subTaskArray[columnIndex][taskIndex].map((value, index) => (
-          <p key={index}>{value.title}</p>
-        ))
-      )
-      setSubtaskTitleArray(subTaskArray[columnIndex][taskIndex])
-      setSubtaskComplete(
-        subTaskArray[columnIndex][taskIndex].map((value) => value.isCompleted)
-      )
-      setTaskId(columnName[columnIndex].tasks[taskIndex]._id)
-      setDataIsCompleted(
-        data[boardIndex].columns[columnIndex].tasks[taskIndex].subtasks
-      )
-      console.log(boardIndex, columnIndex, taskIndex)
-      console.log(
-        data[boardIndex].columns[columnIndex].tasks[taskIndex].subtasks
-      )
-    } else {
-      initTest.current = true
-    }
-  }, [taskIndex])
+  // const getSubtasks = useEffect(() => {
+  //   if (initTest.current) {
+  //     setSubtaskTitle(
+  //       subTaskArray[columnIndex][taskIndex].map((value, index) => (
+  //         <p key={index}>{value.title}</p>
+  //       ))
+  //     )
+  //     setSubtaskTitleArray(subTaskArray[columnIndex][taskIndex])
+  //     setSubtaskComplete(
+  //       subTaskArray[columnIndex][taskIndex].map((value) => value.isCompleted)
+  //     )
+  //     setTaskId(columnName[columnIndex].tasks[taskIndex]._id)
+  //     setDataIsCompleted(
+  //       data[boardIndex].columns[columnIndex].tasks[taskIndex].subtasks
+  //     )
+  //     console.log(boardIndex, columnIndex, taskIndex)
+  //     console.log(
+  //       data[boardIndex].columns[columnIndex].tasks[taskIndex].subtasks
+  //     )
+  //   } else {
+  //     initTest.current = true
+  //   }
+  // }, [taskIndex])
 
   const getSubtaskId = useEffect(() => {
     if (initSubtaskId.current) {
-      setSubtaskId(
-        columnName[columnIndex].tasks[taskIndex].subtasks[subtaskIndex]._id
-      )
+      // setSubtaskId(
+      //   columnName[columnIndex].tasks[taskIndex].subtasks[subtaskIndex]._id
+      // )
       setSubtaskIsCompleted((prev) => !prev)
     } else {
       initSubtaskId.current = true
@@ -173,7 +174,7 @@ export const FetchProvider = ({ children }) => {
         ].isCompleted = subtaskIsCompleted
         return newArray
       })
-      setTestToggle((prev) => !prev)
+      setUpdateToggle((prev) => !prev)
     } else {
       initUpdate.current = true
     }
@@ -206,7 +207,7 @@ export const FetchProvider = ({ children }) => {
     } else {
       initUpdateTasks.current = true
     }
-  }, [testToggle])
+  }, [updateToggle])
 
   const updateData = useEffect(() => {
     if (initDataUpdate.current) {
@@ -222,10 +223,11 @@ export const FetchProvider = ({ children }) => {
         name: name,
         columns: nameArray.map((value) => ({
           name: value,
+          tasks: [],
         })),
       })
       setData(newData)
-      setTestToggle((prev) => !prev)
+      setUpdateToggle((prev) => !prev)
     } else {
       initNewBoard.current = true
     }
@@ -295,6 +297,15 @@ export const FetchProvider = ({ children }) => {
         newBoardModalDisplay,
         setDeleteBoardModalDisplay,
         deleteBoardModalDisplay,
+        setUpdateToggle,
+        updateToggle,
+        setEditBoardModalDisplay,
+        editBoardModalDisplay,
+        setBoardName,
+        setAddTaskModalDisplay,
+        addTaskModalDisplay,
+        setDropStatus,
+        dropStatus,
       }}
     >
       {children}

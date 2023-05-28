@@ -27,6 +27,7 @@ export default function Navbar() {
 
   const openEditModal = () => {
     setOpenOption(false)
+    fetch.setEditBoardModalDisplay(true)
   }
 
   const openDeleteModal = () => {
@@ -35,12 +36,15 @@ export default function Navbar() {
   }
 
   return (
-    <div className='-z-10 flex bg-white items-center border-b-[1px] border-gray-bright'>
+    <div className='z-10 w-full flex bg-white items-center border-b-[1px] border-gray-bright fixed top-0'>
       <div className='border-r-[1px] border-gray-bright w-[300px] h-[100px] flex items-center pl-8'>
         <img src={icon12} alt='Main logo' />
       </div>
       <div className='ml-5 text-xl font-bold'>{fetch.boardName}</div>
-      <button className='ml-auto bg-purple p-3 px-5 text-white rounded-full hover:bg-purple-light'>
+      <button
+        className='ml-auto bg-purple p-3 px-5 text-white rounded-full hover:bg-purple-light'
+        onClick={() => fetch.setAddTaskModalDisplay(true)}
+      >
         + Add New Task
       </button>
       <div

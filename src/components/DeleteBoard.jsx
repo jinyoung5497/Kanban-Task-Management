@@ -22,6 +22,16 @@ export default function DeleteBoard() {
       fetch.setDeleteBoardModalDisplay(false)
     }
   }
+
+  const deleteBoard = () => {
+    fetch.setDeleteBoardModalDisplay(false)
+    const newData = [...fetch.data]
+    newData.splice(fetch.boardIndex, 1)
+    fetch.setData(newData)
+    fetch.setBoardIndex(0)
+    fetch.setUpdateToggle((prev) => !prev)
+  }
+
   return (
     <div
       className={`${
@@ -42,7 +52,10 @@ export default function DeleteBoard() {
           remove all columns and tasks and cannot be reversed.
         </p>
         <div className='flex'>
-          <button className='bg-red block w-full rounded-full mr-1 p-3 text-linen  text-md'>
+          <button
+            className='bg-red block w-full rounded-full mr-1 p-3 text-linen  text-md'
+            onClick={deleteBoard}
+          >
             Delete
           </button>
           <button
