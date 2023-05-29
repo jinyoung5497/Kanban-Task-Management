@@ -8,12 +8,10 @@ export default function EditBoard() {
   const editBoardRef = useRef()
   const initTest = useRef(false)
 
-  const deleteBoard = (index) => {
-    console.log(index)
-  }
-
   const columnIncrement = () => {
-    fetch.setMainBoard((prev) => [...prev, ''])
+    const newArray = [...fetch.mainBoard]
+    newArray.push({ name: '', tasks: [] })
+    fetch.setMainBoard(newArray)
   }
 
   const updateName = () => {
@@ -27,14 +25,12 @@ export default function EditBoard() {
     console.log(newArray)
   }
 
-  const createNewBoard = () => {
+  const editBoard = () => {
     const newData = [...fetch.data]
     newData.splice(fetch.boardIndex, 1)
     newData.push({
       name: fetch.boardName,
-      columns: fetch.mainBoard.map((value) => ({
-        name: value.name,
-      })),
+      columns: [...fetch.mainBoard],
     })
     fetch.setData(newData)
     fetch.setUpdateToggle((prev) => !prev)
@@ -42,8 +38,8 @@ export default function EditBoard() {
   }
 
   useEffect(() => {
-    console.log(fetch.mainBoard)
-  }, [fetch.mainBoard])
+    console.log(fetch.data)
+  }, [fetch.updateToggle])
 
   useEffect(() => {
     if (fetch.editBoardModalDisplay) {
@@ -123,7 +119,7 @@ export default function EditBoard() {
             + Add New Column
           </button>
           <button
-            onClick={createNewBoard}
+            onClick={editBoard}
             className='bg-purple w-full rounded-full p-3 text-md text-linen'
           >
             Save Changes

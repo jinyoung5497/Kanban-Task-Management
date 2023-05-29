@@ -9,62 +9,39 @@ import React, {
 const FetchContext = createContext(null)
 
 export const FetchProvider = ({ children }) => {
-  const [columnArray, setColumnArray] = useState([])
+  const [data, setData] = useState([])
+  const [mainBoard, setMainBoard] = useState([])
   const [boardIndex, setBoardIndex] = useState([])
-  const [taskArray, setTaskArray] = useState([])
-  const [subTaskArray, setSubTaskArray] = useState([])
-  const [modalDisplay, setModalDisplay] = useState(false)
+  const [columnIndex, setColumnIndex] = useState([])
   const [taskIndex, setTaskIndex] = useState([])
+  const [subtaskIndex, setSubtaskIndex] = useState([])
   const [taskTitle, setTaskTitle] = useState('')
   const [taskDescription, setTaskDescription] = useState('')
   const [taskStatus, setTaskStatus] = useState('')
-  const [subtaskTitle, setSubtaskTitle] = useState('')
-  const [columnIndex, setColumnIndex] = useState([])
-  const [columnName, setColumnName] = useState([])
   const [handleSelected, setHandleSelected] = useState(false)
   const [darkMode, setDarkMode] = useState(false)
   const [showSidebar, setShowSidebar] = useState(false)
   const [boardName, setBoardName] = useState('')
-  const [subtaskTitleArray, setSubtaskTitleArray] = useState([])
-  const [subtaskComplete, setSubtaskComplete] = useState([])
-  const [boardId, setBoardId] = useState('')
-  const [columnId, setColumnId] = useState('')
-  const [taskId, setTaskId] = useState('')
-  const [subtaskId, setSubtaskId] = useState('')
-  const [subtaskIndex, setSubtaskIndex] = useState([])
-  const [subtaskIsCompleted, setSubtaskIsCompleted] = useState()
-  const [updateIsCompleted, setUpdateIsCompleted] = useState()
-  const [data, setData] = useState([])
-  const [dataIsCompleted, setDataIsCompleted] = useState([])
-  const [mainBoard, setMainBoard] = useState([])
+  const [subtaskIsCompleted, setSubtaskIsCompleted] = useState(false)
   const [subtaskToggle, setSubtaskToggle] = useState(false)
   const [subtaskData, setSubtaskData] = useState([])
-  const [task, setTask] = useState([])
   const [toggleNewBoard, setToggleNewBoard] = useState(false)
-  const [toggleNewColumn, setToggleNewColumn] = useState(false)
   const [name, setName] = useState('')
   const [nameArray, setNameArray] = useState(['Todo', 'Doing', 'Done'])
-  const [newColumnId, setNewColumnId] = useState('')
-  const [toggleColumnId, setToggleColumnId] = useState(false)
+  const [modalDisplay, setModalDisplay] = useState(false)
   const [newBoardModalDisplay, setNewBoardModalDisplay] = useState(false)
   const [deleteBoardModalDisplay, setDeleteBoardModalDisplay] = useState(false)
   const [editBoardModalDisplay, setEditBoardModalDisplay] = useState(false)
   const [addTaskModalDisplay, setAddTaskModalDisplay] = useState(false)
+  const [editTaskModalDisplay, setEditTaskModalDisplay] = useState(false)
   const [updateToggle, setUpdateToggle] = useState(false)
   const [dropStatus, setDropStatus] = useState('')
 
-  const initRender = useRef(false)
   const initUpdate = useRef(false)
   const initUpdateTasks = useRef(false)
-  const initTest = useRef(false)
-  const initBoardName = useRef(false)
-  const initColumnId = useRef(false)
   const initSubtaskId = useRef(false)
   const initData = useRef(false)
-  const initDataUpdate = useRef(false)
   const initNewBoard = useRef(false)
-  const initNewColumn = useRef(false)
-  const initNewColumnId = useRef(false)
 
   const getBoards = useEffect(() => {
     fetch(`http://localhost:4000/api/boards/data/645730237aace50e6a6193b0`)
@@ -73,7 +50,7 @@ export const FetchProvider = ({ children }) => {
         setData(data.boards)
         setBoardIndex(0)
         setBoardName(data.boards[0].name)
-        setBoardId(data.boards[0]._id)
+        console.log(data.boards)
       })
       .catch((error) => console.log(error))
   }, [])
@@ -88,77 +65,12 @@ export const FetchProvider = ({ children }) => {
     }
   }, [boardIndex])
 
-  const getBoardName = useEffect(() => {
-    if (initBoardName.current) {
-      setBoardId(data[boardIndex]._id)
-    } else {
-      initBoardName.current = true
-    }
-  }, [boardIndex])
-
-  const getColumns = useEffect(() => {
-    if (initRender.current) {
-      fetch(`http://localhost:4000/api/boards/${'645730237aace50e6a6193b0'}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setColumnArray(
-            data[boardIndex].columns.map((value, index) => (
-              <div key={index} className='mr-2 '>
-                {value.name}
-              </div>
-            ))
-          )
-          setTaskArray(data[boardIndex].columns.map((value) => value.tasks))
-          setSubTaskArray(
-            data[boardIndex].columns.map((value) =>
-              value.tasks.map((value) => value.subtasks)
-            )
-          )
-          setColumnName(data[boardIndex].columns)
-        })
-        .catch((error) => console.log(error))
-    } else {
-      initRender.current = true
-    }
-  }, [boardIndex])
-
-  const getColumnId = useEffect(() => {
-    if (initColumnId.current) {
-      setColumnId(columnName[columnIndex]._id)
-    } else {
-      initColumnId.current = true
-    }
-  }, [columnIndex])
-
-  // const getSubtasks = useEffect(() => {
-  //   if (initTest.current) {
-  //     setSubtaskTitle(
-  //       subTaskArray[columnIndex][taskIndex].map((value, index) => (
-  //         <p key={index}>{value.title}</p>
-  //       ))
-  //     )
-  //     setSubtaskTitleArray(subTaskArray[columnIndex][taskIndex])
-  //     setSubtaskComplete(
-  //       subTaskArray[columnIndex][taskIndex].map((value) => value.isCompleted)
-  //     )
-  //     setTaskId(columnName[columnIndex].tasks[taskIndex]._id)
-  //     setDataIsCompleted(
-  //       data[boardIndex].columns[columnIndex].tasks[taskIndex].subtasks
-  //     )
-  //     console.log(boardIndex, columnIndex, taskIndex)
-  //     console.log(
-  //       data[boardIndex].columns[columnIndex].tasks[taskIndex].subtasks
-  //     )
-  //   } else {
-  //     initTest.current = true
-  //   }
-  // }, [taskIndex])
+  useEffect(() => {
+    console.log(boardIndex, columnIndex, taskIndex, subtaskIndex)
+  }, [boardIndex, columnIndex, taskIndex, subtaskIndex])
 
   const getSubtaskId = useEffect(() => {
     if (initSubtaskId.current) {
-      // setSubtaskId(
-      //   columnName[columnIndex].tasks[taskIndex].subtasks[subtaskIndex]._id
-      // )
       setSubtaskIsCompleted((prev) => !prev)
     } else {
       initSubtaskId.current = true
@@ -182,7 +94,6 @@ export const FetchProvider = ({ children }) => {
 
   const postData = useEffect(() => {
     if (initUpdateTasks.current) {
-      console.log(data)
       fetch(
         'http://localhost:4000/api/boards/newboard/645730237aace50e6a6193af',
         {
@@ -204,17 +115,11 @@ export const FetchProvider = ({ children }) => {
         .catch((error) => {
           console.log(error)
         })
+      console.log(data)
     } else {
       initUpdateTasks.current = true
     }
   }, [updateToggle])
-
-  const updateData = useEffect(() => {
-    if (initDataUpdate.current) {
-    } else {
-      initDataUpdate.current = true
-    }
-  }, [data])
 
   const addNewBoard = useEffect(() => {
     if (initNewBoard.current) {
@@ -236,9 +141,6 @@ export const FetchProvider = ({ children }) => {
   return (
     <FetchContext.Provider
       value={{
-        columnArray,
-        taskArray,
-        setModalDisplay,
         setTaskTitle,
         setBoardIndex,
         taskTitle,
@@ -246,10 +148,7 @@ export const FetchProvider = ({ children }) => {
         setTaskDescription,
         setTaskStatus,
         taskStatus,
-        subTaskArray,
-        subtaskTitle,
         setColumnIndex,
-        columnName,
         handleSelected,
         setHandleSelected,
         boardIndex,
@@ -258,41 +157,23 @@ export const FetchProvider = ({ children }) => {
         setShowSidebar,
         showSidebar,
         boardName,
-        modalDisplay,
-        subtaskTitleArray,
-        subtaskComplete,
-        setSubtaskComplete,
-        boardId,
-        setBoardId,
-        columnId,
-        setColumnId,
-        taskId,
-        setTaskId,
-        subtaskId,
-        setSubtaskId,
         setTaskIndex,
         taskIndex,
         setSubtaskIndex,
         subtaskIndex,
-        setSubtaskIsCompleted,
-        subtaskIsCompleted,
         data,
         setData,
-        setUpdateIsCompleted,
-        updateIsCompleted,
-        dataIsCompleted,
-        setDataIsCompleted,
         setMainBoard,
         mainBoard,
         setSubtaskToggle,
         setSubtaskData,
         subtaskData,
-        setTask,
-        task,
         setToggleNewBoard,
         setName,
         setNameArray,
         nameArray,
+        modalDisplay,
+        setModalDisplay,
         setNewBoardModalDisplay,
         newBoardModalDisplay,
         setDeleteBoardModalDisplay,
@@ -306,6 +187,9 @@ export const FetchProvider = ({ children }) => {
         addTaskModalDisplay,
         setDropStatus,
         dropStatus,
+        setSubtaskIsCompleted,
+        setEditTaskModalDisplay,
+        editTaskModalDisplay,
       }}
     >
       {children}

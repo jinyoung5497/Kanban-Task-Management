@@ -23,7 +23,7 @@ export default function App() {
         <MainBoard />
       </div>
       <div className='fixed top-0 z-20'>
-        {fetch.modalDisplay && <TaskModal />}
+        <TaskModal />
       </div>
       <div className='fixed top-0 z-20'>
         <AddBoard />
@@ -36,6 +36,9 @@ export default function App() {
       </div>
       <div className='fixed top-0 z-20'>
         <AddTask />
+      </div>
+      <div className='fixed top-0 z-20'>
+        <EditTask />
       </div>
     </>
   )

@@ -7,7 +7,7 @@ export default function TaskModal() {
   const modalRef = useRef()
   const [openOption, setOpenOption] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [dropdownTitle, setDropdownTitle] = useState(fetch.subtaskStatus)
+  const [dropdownTitle, setDropdownTitle] = useState(fetch.taskStatus)
 
   const handleChange = (event) => {
     fetch.setHandleSelected(event.target.value == fetch.taskStatus)
@@ -39,18 +39,40 @@ export default function TaskModal() {
     fetch.setSubtaskIndex(index)
     fetch.setSubtaskIsCompleted(fetch.subtaskData[index].isCompleted)
     fetch.setSubtaskToggle((prev) => !prev)
+    console.log(value.isCompleted)
   }
 
-  const handleDropdown = (title) => {
+  const handleDropdown = (title, index) => {
     setDropdownOpen(false)
     setDropdownTitle(title)
+    console.log(fetch.taskStatus)
+    console.log(fetch.subtaskData)
+    console.log(fetch.data)
+    console.log(index)
+    console.log(fetch.taskIndex)
+    const newArray = [...fetch.data]
+    // newArray[fetch.boardIndex].columns[fetch.columnIndex].tasks[
+    //   fetch.taskIndex
+    // ].status = title
+    console.log(newArray)
+  }
+
+  const openEditTask = () => {
+    fetch.setEditTaskModalDisplay(true)
+    fetch.setModalDisplay(false)
   }
 
   return (
     <>
-      <div className='bg-[#6b6b6b77] w-screen h-screen flex items-center justify-center'>
+      <div
+        className={`${
+          fetch.modalDisplay ? 'block' : 'hidden'
+        } bg-[#6b6b6b77] w-screen h-screen flex items-center justify-center`}
+      >
         <div
-          className='bg-white w-[500px] p-8 rounded-lg absolute'
+          className={`${
+            fetch.modalDisplay ? 'block' : 'hidden'
+          } bg-white w-[500px] p-8 rounded-lg absolute`}
           ref={modalRef}
         >
           <div className='flex items-center mb-5'>
@@ -65,7 +87,9 @@ export default function TaskModal() {
                   openOption ? 'block' : 'hidden'
                 } relative top-20 z-10 w-40 bg-white rounded-md flex flex-col justify-center items-start p-5 gap-y-3 text-md shadow-lg`}
               >
-                <button className='text-gray-light'>Edit Task</button>
+                <button className='text-gray-light' onClick={openEditTask}>
+                  Edit Task
+                </button>
                 <button className='text-red'>Delete Task</button>
               </div>
             </div>
@@ -112,10 +136,11 @@ export default function TaskModal() {
             <input
               type='text'
               value={dropdownTitle}
-              defaultValue={fetch.taskStatus}
+              placeholder={fetch.taskStatus}
+              // defaultValue={fetch.taskStatus}
               readOnly
               onClick={() => setDropdownOpen(true)}
-              className='w-full border-[1px] border-gray-bright p-2 rounded-md'
+              className='w-full border-[1px] border-gray-bright p-2 rounded-md placeholder:text-black'
             />
             {dropdownOpen && (
               <ul className='relative p-3 rounded-md'>
@@ -123,7 +148,7 @@ export default function TaskModal() {
                   return (
                     <li
                       key={index}
-                      onClick={() => handleDropdown(value.name)}
+                      onClick={() => handleDropdown(value.name, index)}
                       className='mb-1 text-gray-light'
                     >
                       {value.name}

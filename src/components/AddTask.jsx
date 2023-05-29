@@ -32,6 +32,7 @@ export default function AddTask() {
   const handleDropdown = (name, index) => {
     setDropdownOpen(false)
     fetch.setDropStatus(name)
+    console.log(fetch.taskStatus)
     setSubtaskIndex(index)
   }
 
@@ -54,8 +55,8 @@ export default function AddTask() {
   }
 
   const createTask = () => {
-    const newData = [...fetch.mainBoard]
-    newData[subtaskIndex].tasks.push({
+    const newData = [...fetch.data]
+    newData[fetch.boardIndex].columns[subtaskIndex].tasks.push({
       title: title,
       description: description,
       status: fetch.dropStatus,
@@ -64,6 +65,11 @@ export default function AddTask() {
         isCompleted: false,
       })),
     })
+
+    console.log(newData)
+    console.log(fetch.data)
+
+    fetch.setData(newData)
     fetch.setAddTaskModalDisplay(false)
     fetch.setUpdateToggle((prev) => !prev)
   }
@@ -132,7 +138,7 @@ export default function AddTask() {
           </button>
           <p className='text-sm text-gray-light font-bold mb-2'>Status</p>
 
-          {/* ============DROP DOWN ============ */}
+          {/* ============ DROP DOWN ============ */}
           <div>
             <input
               type='text'
