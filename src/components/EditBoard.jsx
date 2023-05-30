@@ -38,10 +38,6 @@ export default function EditBoard() {
   }
 
   useEffect(() => {
-    console.log(fetch.data)
-  }, [fetch.updateToggle])
-
-  useEffect(() => {
     if (fetch.editBoardModalDisplay) {
       document.addEventListener('mousedown', handleOutsideClick)
     } else {

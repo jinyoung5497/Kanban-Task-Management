@@ -12,7 +12,7 @@ export const FetchProvider = ({ children }) => {
   const [data, setData] = useState([])
   const [mainBoard, setMainBoard] = useState([])
   const [boardIndex, setBoardIndex] = useState([])
-  const [columnIndex, setColumnIndex] = useState([])
+  const [columnIndex, setColumnIndex] = useState('')
   const [taskIndex, setTaskIndex] = useState([])
   const [subtaskIndex, setSubtaskIndex] = useState([])
   const [taskTitle, setTaskTitle] = useState('')
@@ -34,14 +34,30 @@ export const FetchProvider = ({ children }) => {
   const [editBoardModalDisplay, setEditBoardModalDisplay] = useState(false)
   const [addTaskModalDisplay, setAddTaskModalDisplay] = useState(false)
   const [editTaskModalDisplay, setEditTaskModalDisplay] = useState(false)
+  const [deleteTaskModalDisplay, setDeleteTaskModalDisplay] = useState(false)
   const [updateToggle, setUpdateToggle] = useState(false)
   const [dropStatus, setDropStatus] = useState('')
+  const [currentStatus, setCurrentStatus] = useState('')
+  const [changeStatus, setChangeStatus] = useState(false)
+  const [checkStatus, setCheckStatus] = useState(false)
+  const [statusIndex, setStatusIndex] = useState('')
+  const [toggleEditTask, setToggleEditTask] = useState(false)
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [subtasksArray, setSubtasksArray] = useState([])
+  const [toggleDeleteTask, setToggleDeleteTask] = useState(false)
 
   const initUpdate = useRef(false)
   const initUpdateTasks = useRef(false)
   const initSubtaskId = useRef(false)
   const initData = useRef(false)
   const initNewBoard = useRef(false)
+  const initTask = useRef(false)
+  const initTaskStatus = useRef(false)
+  const initEditTask = useRef(false)
+  const initDeleteTask = useRef(false)
+
+  //* ================= Get Data from server =============
 
   const getBoards = useEffect(() => {
     fetch(`http://localhost:4000/api/boards/data/645730237aace50e6a6193b0`)
@@ -50,7 +66,6 @@ export const FetchProvider = ({ children }) => {
         setData(data.boards)
         setBoardIndex(0)
         setBoardName(data.boards[0].name)
-        console.log(data.boards)
       })
       .catch((error) => console.log(error))
   }, [])
@@ -65,9 +80,83 @@ export const FetchProvider = ({ children }) => {
     }
   }, [boardIndex])
 
+  //* ================= Test index =============
+
   useEffect(() => {
     console.log(boardIndex, columnIndex, taskIndex, subtaskIndex)
   }, [boardIndex, columnIndex, taskIndex, subtaskIndex])
+
+  //* ================= Task Status =============
+
+  const getTaskStatus = useEffect(() => {
+    if (initTaskStatus.current) {
+      setCurrentStatus(
+        data[boardIndex].columns[columnIndex].tasks[taskIndex].status
+      )
+      console.log(
+        'currentStatus:',
+        data[boardIndex].columns[columnIndex].tasks[taskIndex].status
+      )
+    } else {
+      initTaskStatus.current = true
+    }
+  }, [checkStatus, changeStatus])
+
+  const updateTaskStatus = useEffect(() => {
+    if (initTask.current) {
+      const newArray = [...data]
+      newArray[boardIndex].columns[columnIndex].tasks[taskIndex].status =
+        taskStatus
+      const movedArray = newArray[boardIndex].columns[columnIndex].tasks.splice(
+        taskIndex,
+        1
+      )
+      newArray[boardIndex].columns[statusIndex].tasks.push(...movedArray)
+      setData(newArray)
+      setUpdateToggle((prev) => !prev)
+      setColumnIndex(statusIndex)
+      setTaskIndex(newArray[boardIndex].columns[statusIndex].tasks.length - 1)
+    } else {
+      initTask.current = true
+    }
+  }, [changeStatus])
+
+  //* ================= Edit Tasks =============
+
+  const editTasks = useEffect(() => {
+    if (initEditTask.current) {
+      const newData = [...data]
+      newData[boardIndex].columns[columnIndex].tasks[taskIndex].title =
+        taskTitle
+      newData[boardIndex].columns[columnIndex].tasks[taskIndex].description =
+        taskDescription
+      newData[boardIndex].columns[columnIndex].tasks[taskIndex].status =
+        taskStatus
+      newData[boardIndex].columns[columnIndex].tasks[taskIndex].subtasks =
+        subtasksArray.map((value) => ({
+          title: value.title,
+          isCompleted: value.isCompleted,
+        }))
+      setData(newData)
+      setUpdateToggle((prev) => !prev)
+    } else {
+      initEditTask.current = true
+    }
+  }, [toggleEditTask])
+
+  //* ================= Delete Task =============
+  const deleteTask = useEffect(() => {
+    if (initDeleteTask.current) {
+      const newArray = [...data]
+      newArray[boardIndex].columns[columnIndex].tasks.splice(taskIndex, 1)
+      setData(newArray)
+      setUpdateToggle((prev) => !prev)
+    } else {
+      initDeleteTask.current = true
+    }
+  }, [toggleDeleteTask])
+
+  //* ================= Subtask IsCompleted =============
 
   const getSubtaskId = useEffect(() => {
     if (initSubtaskId.current) {
@@ -91,6 +180,8 @@ export const FetchProvider = ({ children }) => {
       initUpdate.current = true
     }
   }, [subtaskIsCompleted])
+
+  //* ================= Update data to server =============
 
   const postData = useEffect(() => {
     if (initUpdateTasks.current) {
@@ -120,6 +211,8 @@ export const FetchProvider = ({ children }) => {
       initUpdateTasks.current = true
     }
   }, [updateToggle])
+
+  //* ================= Add New Board =============
 
   const addNewBoard = useEffect(() => {
     if (initNewBoard.current) {
@@ -190,6 +283,20 @@ export const FetchProvider = ({ children }) => {
         setSubtaskIsCompleted,
         setEditTaskModalDisplay,
         editTaskModalDisplay,
+        setChangeStatus,
+        currentStatus,
+        setCheckStatus,
+        setStatusIndex,
+        setToggleEditTask,
+        setTitle,
+        title,
+        setDescription,
+        description,
+        setSubtasksArray,
+        subtasksArray,
+        setDeleteTaskModalDisplay,
+        deleteTaskModalDisplay,
+        setToggleDeleteTask,
       }}
     >
       {children}

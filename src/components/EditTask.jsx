@@ -6,10 +6,6 @@ export default function EditTask() {
   const fetch = useFetch()
   const editTaskRef = useRef()
   const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [subtasksArray, setSubtasksArray] = useState([])
-  const [subtaskIndex, setSubtaskIndex] = useState(0)
 
   useEffect(() => {
     if (fetch.editTaskModalDisplay) {
@@ -29,57 +25,36 @@ export default function EditTask() {
     }
   }
 
-  const handleDropdown = (name, index) => {
+  const handleDropdown = (title, index) => {
     setDropdownOpen(false)
-    fetch.setDropStatus(name)
-    setSubtaskIndex(index)
+    fetch.setTaskStatus(title)
+    fetch.setStatusIndex(index)
+    console.log('statusIndex:', index)
+    fetch.setChangeStatus((prev) => !prev)
   }
 
   const newSubtask = () => {
-    const newArray = [...subtasksArray]
-    newArray.push('')
-    setSubtasksArray(newArray)
+    const newArray = [...fetch.subtasksArray]
+    newArray.push({ title: '', isCompleted: false })
+    fetch.setSubtasksArray(newArray)
   }
 
   const updateSubtask = (index) => {
-    const newArray = [...subtasksArray]
-    newArray[index] = event.target.value
-    setSubtasksArray(newArray)
+    const newArray = [...fetch.subtasksArray]
+    newArray[index].title = event.target.value
+    fetch.setSubtasksArray(newArray)
   }
 
   const deleteSubtasks = (index) => {
-    const newArray = [...subtasksArray]
+    const newArray = [...fetch.subtasksArray]
     newArray.splice(index, 1)
-    setSubtasksArray(newArray)
+    fetch.setSubtasksArray(newArray)
   }
 
-  const createTask = () => {
-    const newData = [...fetch.data]
-    // newData[fetch.boardIndex].columns[subtaskIndex].tasks.push({
-    //   title: title,
-    //   description: description,
-    //   status: fetch.dropStatus,
-    //   subtasks: subtasksArray.map((value) => ({
-    //     title: value,
-    //     isCompleted: false,
-    //   })),
-    // })
-    newData[fetch.boardIndex].columns[subtaskIndex].tasks.title = title
-    newData[fetch.boardIndex].columns[subtaskIndex].tasks.description =
-      description
-    newData[fetch.boardIndex].columns[subtaskIndex].tasks.status =
-      fetch.dropStatus
-    newData[fetch.boardIndex].columns[subtaskIndex].tasks.subtasks =
-      subtasksArray.map((value) => ({
-        title: value,
-        isCompleted: false,
-      }))
-    console.log(newData)
-    console.log(fetch.data)
-
-    fetch.setData(newData)
-    fetch.setAddTaskModalDisplay(false)
-    fetch.setUpdateToggle((prev) => !prev)
+  const saveChanges = () => {
+    fetch.setToggleEditTask((prev) => !prev)
+    fetch.setEditTaskModalDisplay(false)
+    console.log(fetch.currentStatus)
   }
 
   return (
@@ -103,7 +78,7 @@ export default function EditTask() {
             placeholder='e.g. Take coffee break'
             value={fetch.taskTitle}
             className='p-2 border-[1px] border-gray-bright rounded-md w-full mb-3'
-            onChange={() => setTitle(event.target.value)}
+            onChange={() => fetch.setTaskTitle(event.target.value)}
           />
           {/* DESCRIPTION */}
           <p className='text-sm text-gray-light font-bold mb-2'>Description</p>
@@ -112,13 +87,13 @@ export default function EditTask() {
             placeholder="e.g. It's always good to take a break."
             value={fetch.taskDescription}
             className='p-2 border-[1px] border-gray-bright rounded-md w-full mb-3 h-32 break-all align-top flex items-start justify-start flex-wrap'
-            onChange={() => setDescription(event.target.value)}
+            onChange={() => fetch.setTaskDescription(event.target.value)}
           />
           {/* SUBTASKS */}
           <p className='text-sm text-gray-light font-bold mb-2'>Subtasks</p>
           {/* SUBTASKS INPUT */}
-          {fetch.subtaskData &&
-            fetch.subtaskData.map((value, index) => {
+          {fetch.subtasksArray &&
+            fetch.subtasksArray.map((value, index) => {
               return (
                 <div
                   className='flex items-center justify-center mb-3'
@@ -152,10 +127,11 @@ export default function EditTask() {
           <div>
             <input
               type='text'
-              value={fetch.dropStatus}
+              value={fetch.taskStatus}
+              placeholder={fetch.currentStatus}
               readOnly
               onClick={() => setDropdownOpen(true)}
-              className='w-full border-[1px] border-gray-bright p-2 rounded-md'
+              className='w-full border-[1px] border-gray-bright p-2 rounded-md placeholder:text-black'
             />
             {dropdownOpen && (
               <ul className='relative p-3 rounded-md'>
@@ -175,7 +151,7 @@ export default function EditTask() {
           </div>
           <button
             className='mt-8 bg-purple w-full rounded-full p-3 text-md text-linen'
-            onClick={createTask}
+            onClick={saveChanges}
           >
             Save Changes
           </button>

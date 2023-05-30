@@ -7,7 +7,6 @@ export default function TaskModal() {
   const modalRef = useRef()
   const [openOption, setOpenOption] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [dropdownTitle, setDropdownTitle] = useState(fetch.taskStatus)
 
   const handleChange = (event) => {
     fetch.setHandleSelected(event.target.value == fetch.taskStatus)
@@ -44,23 +43,25 @@ export default function TaskModal() {
 
   const handleDropdown = (title, index) => {
     setDropdownOpen(false)
-    setDropdownTitle(title)
-    console.log(fetch.taskStatus)
-    console.log(fetch.subtaskData)
-    console.log(fetch.data)
-    console.log(index)
-    console.log(fetch.taskIndex)
-    const newArray = [...fetch.data]
-    // newArray[fetch.boardIndex].columns[fetch.columnIndex].tasks[
-    //   fetch.taskIndex
-    // ].status = title
-    console.log(newArray)
+    fetch.setTaskStatus(title)
+    fetch.setStatusIndex(index)
+    console.log('statusIndex:', index)
+    fetch.setChangeStatus((prev) => !prev)
   }
 
   const openEditTask = () => {
     fetch.setEditTaskModalDisplay(true)
     fetch.setModalDisplay(false)
+    fetch.setSubtasksArray(fetch.subtaskData)
   }
+
+  const openDeleteTask = () => {
+    fetch.setDeleteTaskModalDisplay(true)
+    fetch.setModalDisplay(false)
+  }
+
+  // edit board click outside and changes apply
+  // delete column add task
 
   return (
     <>
@@ -90,7 +91,9 @@ export default function TaskModal() {
                 <button className='text-gray-light' onClick={openEditTask}>
                   Edit Task
                 </button>
-                <button className='text-red'>Delete Task</button>
+                <button className='text-red' onClick={openDeleteTask}>
+                  Delete Task
+                </button>
               </div>
             </div>
           </div>
@@ -135,12 +138,11 @@ export default function TaskModal() {
           <div>
             <input
               type='text'
-              value={dropdownTitle}
-              placeholder={fetch.taskStatus}
-              // defaultValue={fetch.taskStatus}
+              value={fetch.taskStatus}
+              placeholder={fetch.currentStatus}
               readOnly
               onClick={() => setDropdownOpen(true)}
-              className='w-full border-[1px] border-gray-bright p-2 rounded-md placeholder:text-black'
+              className='w-full border-[1px] border-gray-bright p-2 rounded-md placeholder:text-gray'
             />
             {dropdownOpen && (
               <ul className='relative p-3 rounded-md'>

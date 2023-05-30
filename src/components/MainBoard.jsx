@@ -11,6 +11,9 @@ export default function MainBoard() {
     fetch.setTaskDescription(value.description)
     fetch.setTaskStatus(value.status)
     fetch.setSubtaskData(value.subtasks)
+    fetch.setCheckStatus((prev) => !prev)
+    console.log('currentStatus:', fetch.currentStatus)
+    console.log('taskStatus:', value.status)
   }
 
   const handleColumnIndex = (index) => {
@@ -52,11 +55,11 @@ export default function MainBoard() {
                           >
                             <div className='font-bold mb-2'>{value.title}</div>
                             <p className='text-sm text-gray-light'>
-                              {
-                                value.subtasks.filter(
-                                  (value) => value.isCompleted == true
-                                ).length
-                              }{' '}
+                              {value.subtasks
+                                ? value.subtasks.filter(
+                                    (value) => value.isCompleted == true
+                                  ).length
+                                : null}{' '}
                               out of {value.subtasks.length} subtasks
                             </p>
                           </div>

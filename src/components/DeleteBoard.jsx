@@ -48,8 +48,8 @@ export default function DeleteBoard() {
           Delete this board?
         </h1>
         <p className='text-md font- text-gray-light mb-8'>
-          Are you sure you want to delete the {'name'} board? This action will
-          remove all columns and tasks and cannot be reversed.
+          Are you sure you want to delete the {fetch.boardName} board? This
+          action will remove all columns and tasks and cannot be reversed.
         </p>
         <div className='flex'>
           <button

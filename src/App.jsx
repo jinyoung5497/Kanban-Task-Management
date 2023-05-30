@@ -40,6 +40,9 @@ export default function App() {
       <div className='fixed top-0 z-20'>
         <EditTask />
       </div>
+      <div className='fixed top-0 z-20'>
+        <DeleteTask />
+      </div>
     </>
   )
 }
