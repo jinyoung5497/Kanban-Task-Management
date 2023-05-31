@@ -46,6 +46,7 @@ export const FetchProvider = ({ children }) => {
   const [description, setDescription] = useState('')
   const [subtasksArray, setSubtasksArray] = useState([])
   const [toggleDeleteTask, setToggleDeleteTask] = useState(false)
+  const [toggleResetValue, setToggleResetValue] = useState(false)
 
   const initUpdate = useRef(false)
   const initUpdateTasks = useRef(false)
@@ -297,6 +298,8 @@ export const FetchProvider = ({ children }) => {
         setDeleteTaskModalDisplay,
         deleteTaskModalDisplay,
         setToggleDeleteTask,
+        setToggleResetValue,
+        toggleResetValue,
       }}
     >
       {children}

@@ -25,6 +25,11 @@ export default function Navbar() {
     }
   }
 
+  const openAddNewTask = () => {
+    fetch.setAddTaskModalDisplay(true)
+    fetch.setToggleResetValue((prev) => !prev)
+  }
+
   const openEditModal = () => {
     setOpenOption(false)
     fetch.setEditBoardModalDisplay(true)
@@ -43,7 +48,7 @@ export default function Navbar() {
       <div className='ml-5 text-xl font-bold'>{fetch.boardName}</div>
       <button
         className='ml-auto bg-purple p-3 px-5 text-white rounded-full hover:bg-purple-light'
-        onClick={() => fetch.setAddTaskModalDisplay(true)}
+        onClick={openAddNewTask}
       >
         + Add New Task
       </button>

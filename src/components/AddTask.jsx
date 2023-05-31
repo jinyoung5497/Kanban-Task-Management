@@ -26,6 +26,7 @@ export default function AddTask() {
   const handleOutsideClick = (e) => {
     if (addTaskRef.current && !addTaskRef.current.contains(e.target)) {
       fetch.setAddTaskModalDisplay(false)
+      fetch.setToggleResetValue((prev) => !prev)
     }
   }
 
@@ -74,6 +75,13 @@ export default function AddTask() {
     fetch.setUpdateToggle((prev) => !prev)
   }
 
+  useEffect(() => {
+    setTitle('')
+    setDescription('')
+    setSubtasksArray([])
+    // fetch.setDropStatus(fetch.mainBoard[0].name)
+  }, [fetch.toggleResetValue])
+
   return (
     <>
       <div
@@ -93,6 +101,7 @@ export default function AddTask() {
           <input
             type='text'
             placeholder='e.g. Take coffee break'
+            value={title}
             className='p-2 border-[1px] border-gray-bright rounded-md w-full mb-3'
             onChange={() => setTitle(event.target.value)}
           />
@@ -101,6 +110,7 @@ export default function AddTask() {
           <textarea
             type='text'
             placeholder="e.g. It's always good to take a break."
+            value={description}
             className='p-2 border-[1px] border-gray-bright rounded-md w-full mb-3 h-32 break-all align-top flex items-start justify-start flex-wrap'
             onChange={() => setDescription(event.target.value)}
           />
@@ -138,7 +148,7 @@ export default function AddTask() {
           </button>
           <p className='text-sm text-gray-light font-bold mb-2'>Status</p>
 
-          {/* ============ DROP DOWN ============ */}
+          {/* ============ STATUS DROP DOWN ============ */}
           <div>
             <input
               type='text'
