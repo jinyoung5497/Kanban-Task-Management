@@ -6,7 +6,6 @@ export default function EditBoard() {
   const fetch = useFetch()
   const [indexValue, setIndexValue] = useState('')
   const editBoardRef = useRef()
-  const initTest = useRef(false)
 
   const columnIncrement = () => {
     const newArray = [...fetch.mainBoard]
@@ -52,6 +51,7 @@ export default function EditBoard() {
   const handleOutsideClick = (e) => {
     if (editBoardRef.current && !editBoardRef.current.contains(e.target)) {
       fetch.setEditBoardModalDisplay(false)
+      editBoard()
     }
   }
 

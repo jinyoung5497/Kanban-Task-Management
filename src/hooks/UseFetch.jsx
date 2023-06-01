@@ -11,7 +11,7 @@ const FetchContext = createContext(null)
 export const FetchProvider = ({ children }) => {
   const [data, setData] = useState([])
   const [mainBoard, setMainBoard] = useState([])
-  const [boardIndex, setBoardIndex] = useState([])
+  const [boardIndex, setBoardIndex] = useState(0)
   const [columnIndex, setColumnIndex] = useState('')
   const [taskIndex, setTaskIndex] = useState([])
   const [subtaskIndex, setSubtaskIndex] = useState([])
@@ -79,7 +79,7 @@ export const FetchProvider = ({ children }) => {
     } else {
       initData.current = true
     }
-  }, [boardIndex])
+  }, [data, boardIndex])
 
   //* ================= Test index =============
 

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { useFetch } from '../hooks/UseFetch'
-import { icon3, icon11 } from '../assets'
+import { icon4, icon3, icon11 } from '../assets'
 
 export default function TaskModal() {
   const fetch = useFetch()
@@ -31,6 +31,7 @@ export default function TaskModal() {
   const handleOutsideClick = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
       fetch.setModalDisplay(false)
+      setDropdownOpen(false)
     }
   }
 
@@ -60,9 +61,6 @@ export default function TaskModal() {
     fetch.setModalDisplay(false)
   }
 
-  // edit board click outside and changes apply
-  // delete column add task
-
   return (
     <>
       <div
@@ -77,16 +75,18 @@ export default function TaskModal() {
           ref={modalRef}
         >
           <div className='flex items-center mb-5'>
+            {/* TITLE */}
             <h1 className='text-lg font-extrabold'>{fetch.taskTitle}</h1>
+            {/* OPTION */}
             <div
-              className='w-8 h-8 ml-auto flex items-center justify-center cursor-pointer flex-col '
+              className='w-8 h-8 ml-auto flex items-center justify-center cursor-pointer flex-col'
               onClick={() => setOpenOption((prev) => !prev)}
             >
-              <img src={icon11} alt='option icon' className='' />
+              <img src={icon11} alt='option icon' className='absolute' />
               <div
                 className={`${
                   openOption ? 'block' : 'hidden'
-                } relative top-20 z-10 w-40 bg-white rounded-md flex flex-col justify-center items-start p-5 gap-y-3 text-md shadow-lg`}
+                } absolute top-20 z-10 w-40 bg-white rounded-md flex flex-col justify-center items-start p-5 gap-y-3 text-md shadow-lg`}
               >
                 <button className='text-gray-light' onClick={openEditTask}>
                   Edit Task
@@ -97,9 +97,11 @@ export default function TaskModal() {
               </div>
             </div>
           </div>
+          {/* DESCRIPTION */}
           <p className='text-[14px] text-gray-light tracking-wide leading-6 mb-4'>
             {fetch.taskDescription}
           </p>
+          {/* SUBTASKS */}
           <p className='text-[13px] text-gray-light font-bold mb-3'>
             Subtasks (
             {
@@ -108,10 +110,11 @@ export default function TaskModal() {
             }{' '}
             of {fetch.subtaskData.length})
           </p>
+          {/* SUBTASKS CHECKBOX */}
           {fetch.subtaskData.map((value, index) => (
             <div
               key={index}
-              className='mb-3 bg-gray-bright p-3 rounded-sm text-sm text-gray-500 font-bold flex items-center cursor-pointer hover:bg-indigo-300 hover:text-black'
+              className='mb-3 bg-gray-bright p-3 rounded-sm text-sm text-gray-500 font-bold flex items-center cursor-pointer hover:bg-indigo-200 hover:text-black'
               onClick={() => subtaskBoolean(value, index)}
             >
               <div
@@ -129,29 +132,46 @@ export default function TaskModal() {
                   }`}
                 />
               </div>
-              <div className='flex-1'>{value.title}</div>
+              <div
+                className={`flex-1 ${
+                  fetch.subtaskData[index].isCompleted
+                    ? 'text-gray line-through'
+                    : 'text-black'
+                }`}
+              >
+                {value.title}
+              </div>
             </div>
           ))}
+          {/* CURRENT STATUS */}
           <p className='text-gray-light text-sm mb-2 font-bold'>
             Current Status
           </p>
           <div>
-            <input
-              type='text'
-              value={fetch.taskStatus}
-              placeholder={fetch.currentStatus}
-              readOnly
-              onClick={() => setDropdownOpen(true)}
-              className='w-full border-[1px] border-gray-bright p-2 rounded-md placeholder:text-gray'
-            />
+            <div className='w-full flex justify-center items-center'>
+              <input
+                type='text'
+                value={fetch.taskStatus}
+                placeholder={fetch.currentStatus}
+                readOnly
+                onClick={() => setDropdownOpen((prev) => !prev)}
+                className='w-full border-[1px] border-gray-bright p-2 rounded-md placeholder:text-gray text-[14px] cursor-pointer outline-none focus:border-purple'
+              />
+              <img
+                src={icon4}
+                alt='checkdown icon'
+                className='w-3 h-2 absolute right-11 cursor-pointer'
+                onClick={() => setDropdownOpen((prev) => !prev)}
+              />
+            </div>
             {dropdownOpen && (
-              <ul className='relative p-3 rounded-md'>
+              <ul className='absolute bg-white w-[430px] p-3 rounded-md cursor-pointer'>
                 {fetch.mainBoard.map((value, index) => {
                   return (
                     <li
                       key={index}
                       onClick={() => handleDropdown(value.name, index)}
-                      className='mb-1 text-gray-light'
+                      className='mb-2 text-gray-light text-[14px]'
                     >
                       {value.name}
                     </li>

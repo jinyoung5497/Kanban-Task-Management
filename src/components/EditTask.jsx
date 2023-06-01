@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { icon6 } from '../assets'
+import { icon4, icon6 } from '../assets'
 import { useFetch } from '../hooks/UseFetch'
 
 export default function EditTask() {
@@ -22,6 +22,7 @@ export default function EditTask() {
   const handleOutsideClick = (e) => {
     if (editTaskRef.current && !editTaskRef.current.contains(e.target)) {
       fetch.setEditTaskModalDisplay(false)
+      fetch.setToggleEditTask((prev) => !prev)
     }
   }
 
@@ -77,7 +78,7 @@ export default function EditTask() {
             type='text'
             placeholder='e.g. Take coffee break'
             value={fetch.taskTitle}
-            className='p-2 border-[1px] border-gray-bright rounded-md w-full mb-3'
+            className='p-2 text-[14px] border-[1px] border-gray-bright rounded-md w-full mb-3'
             onChange={() => fetch.setTaskTitle(event.target.value)}
           />
           {/* DESCRIPTION */}
@@ -86,7 +87,7 @@ export default function EditTask() {
             type='text'
             placeholder="e.g. It's always good to take a break."
             value={fetch.taskDescription}
-            className='p-2 border-[1px] border-gray-bright rounded-md w-full mb-3 h-32 break-all align-top flex items-start justify-start flex-wrap'
+            className='p-2 text-[14px] border-[1px] border-gray-bright rounded-md w-full mb-3 h-32 break-all align-top flex items-start justify-start flex-wrap'
             onChange={() => fetch.setTaskDescription(event.target.value)}
           />
           {/* SUBTASKS */}
@@ -102,7 +103,7 @@ export default function EditTask() {
                   <input
                     type='text'
                     placeholder='e.g. Make coffee'
-                    className='p-2 border-[1px] border-gray-bright rounded-md w-full'
+                    className='p-2 text-[14px] border-[1px] border-gray-bright rounded-md w-full'
                     onChange={() => updateSubtask(index)}
                     value={value.title}
                   />
@@ -116,7 +117,7 @@ export default function EditTask() {
               )
             })}
           <button
-            className='bg-gray-bright block w-full rounded-full mb-5 p-3 text-purple font-bold text-md'
+            className='bg-gray-bright block w-full rounded-full mb-5 p-3 text-purple font-bold text-[14px]'
             onClick={newSubtask}
           >
             + Add New Subtask
@@ -131,7 +132,7 @@ export default function EditTask() {
               placeholder={fetch.currentStatus}
               readOnly
               onClick={() => setDropdownOpen(true)}
-              className='w-full border-[1px] border-gray-bright p-2 rounded-md placeholder:text-black'
+              className='w-full text-[14px] border-[1px] border-gray-bright p-2 rounded-md placeholder:text-black'
             />
             {dropdownOpen && (
               <ul className='relative p-3 rounded-md'>
@@ -140,7 +141,7 @@ export default function EditTask() {
                     <li
                       key={index}
                       onClick={() => handleDropdown(value.name, index)}
-                      className='mb-1 text-gray-light'
+                      className='mb-1 text-[14px] text-gray-light'
                     >
                       {value.name}
                     </li>
@@ -150,7 +151,7 @@ export default function EditTask() {
             )}
           </div>
           <button
-            className='mt-8 bg-purple w-full rounded-full p-3 text-md text-linen'
+            className='mt-8 bg-purple w-full rounded-full p-3 text-[14px] text-linen'
             onClick={saveChanges}
           >
             Save Changes
