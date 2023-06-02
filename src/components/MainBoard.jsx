@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useFetch } from '../hooks/UseFetch'
 
 export default function MainBoard() {
   const fetch = useFetch()
+  const [color, setColor] = useState(['#49c4e5', '#8471f2', '#67e2ae'])
 
   const getTasks = (value, index) => {
     fetch.setModalDisplay(true)
@@ -40,7 +41,11 @@ export default function MainBoard() {
                 onClick={() => handleColumnIndex(index)}
               >
                 <div className='ml-4 flex items-center text-gray-light text-sm font-bold tracking-[2px]'>
-                  <section className='w-4 h-4 bg-teal-400 rounded-full mr-2'></section>
+                  <section
+                    className={`w-4 h-4 bg-[${
+                      color[index % color.length]
+                    }] rounded-full mr-2`}
+                  ></section>
                   {value.name && value.name.toUpperCase()} (
                   {value.tasks ? value.tasks.length : 0})
                 </div>

@@ -5,14 +5,13 @@ import { icon6 } from '../assets'
 export default function AddBoard() {
   const fetch = useFetch()
   const [indexValue, setIndexValue] = useState('')
+  const [error, setError] = useState(false)
+  const [arrayError, setArrayError] = useState(false)
+  const [toggleResetValue, setToggleResetValue] = useState(false)
   const newBoardRef = useRef()
 
   const columnIncrement = () => {
     fetch.setNameArray((prev) => [...prev, ''])
-  }
-
-  const updateName = () => {
-    fetch.setName(event.target.value)
   }
 
   const updateValue = () => {
@@ -22,11 +21,39 @@ export default function AddBoard() {
   }
 
   const createNewBoard = () => {
-    // console.log(fetch.name)
-    // console.log(fetch.nameArray)
-    fetch.setToggleNewBoard((prev) => !prev)
-    fetch.setNewBoardModalDisplay(false)
+    if (
+      fetch.name.length === 0 ||
+      fetch.nameArray
+        .map((value) => value.length === 0)
+        .filter((value) => value == true)[0]
+    ) {
+      if (fetch.name.length === 0) {
+        console.log('no title')
+        setError(true)
+      } else {
+        setError(false)
+      }
+      if (
+        fetch.nameArray
+          .map((value) => value.length === 0)
+          .filter((value) => value == true)[0]
+      ) {
+        console.log('no column')
+        setArrayError(fetch.nameArray.map((value) => value.length === 0))
+      }
+    } else {
+      fetch.setToggleNewBoard((prev) => !prev)
+      fetch.setNewBoardModalDisplay(false)
+      setToggleResetValue((prev) => !prev)
+    }
   }
+
+  useEffect(() => {
+    fetch.setName('')
+    fetch.setNameArray(['Todo', 'Doing', 'Done'])
+    setError(false)
+    setArrayError(false)
+  }, [toggleResetValue])
 
   useEffect(() => {
     if (fetch.newBoardModalDisplay) {
@@ -43,6 +70,7 @@ export default function AddBoard() {
   const handleOutsideClick = (e) => {
     if (newBoardRef.current && !newBoardRef.current.contains(e.target)) {
       fetch.setNewBoardModalDisplay(false)
+      setToggleResetValue((prev) => !prev)
     }
   }
 
@@ -61,23 +89,35 @@ export default function AddBoard() {
         >
           <h2 className='text-lg font-extrabold mb-5'>Add New Board</h2>
           <p className='text-sm text-gray-light font-bold mb-2'>Name</p>
-          <input
-            type='text'
-            placeholder='e.g. Web Design'
-            className='p-2 border-[1px] border-gray-bright rounded-md w-full mb-3'
-            onChange={updateName}
-          />
+          <div className='flex items-center justify-end mb-3'>
+            <input
+              type='text'
+              placeholder='e.g. Web Design'
+              className={`p-2 border-[1px] border-gray-bright outline-none rounded-md w-full focus:border-purple ${
+                error && 'border-red focus:border-red'
+              }`}
+              value={fetch.name}
+              onChange={() => fetch.setName(event.target.value)}
+            />
+            {error && (
+              <div className='absolute mr-3 text-[14px] text-red'>
+                Can't be empty
+              </div>
+            )}
+          </div>
           <p className='text-sm text-gray-light font-bold mb-2'>Columns</p>
           {fetch.nameArray.map((value, index) => {
             return (
               <div
                 key={index}
-                className='flex items-center justify-center mb-3 cursor-pointer'
+                className='flex items-center justify-end mb-3 cursor-pointer'
               >
                 <input
                   type='text'
                   // placeholder='Enter new name'
-                  className='w-full placeholder:text-black p-2 border-[1px] border-gray-bright rounded-md'
+                  className={`w-full placeholder:text-black p-2 border-[1px] border-gray-bright outline-none rounded-md focus:border-purple ${
+                    arrayError[index] && 'border-red focus:border-red'
+                  }`}
                   value={value}
                   onMouseDown={() => {
                     setIndexValue(index)
@@ -94,18 +134,23 @@ export default function AddBoard() {
                   }}
                   className='ml-4'
                 />
+                {arrayError[index] && (
+                  <div className='absolute mr-11 text-[14px] text-red'>
+                    Can't be empty
+                  </div>
+                )}
               </div>
             )
           })}
           <button
             onClick={columnIncrement}
-            className='bg-gray-bright block w-full rounded-full mb-5 p-3 text-purple font-bold text-md'
+            className='bg-gray-bright hover:bg-indigo-200 block w-full rounded-full mb-5 p-3 text-purple font-bold text-md'
           >
             + Add New Column
           </button>
           <button
             onClick={createNewBoard}
-            className='bg-purple w-full rounded-full p-3 text-md text-linen'
+            className='bg-purple hover:bg-purple-light w-full rounded-full p-3 text-md text-linen'
           >
             Create New Board
           </button>

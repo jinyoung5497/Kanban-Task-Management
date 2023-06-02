@@ -60,24 +60,25 @@ export default function AddTask() {
   }
 
   const validateTask = () => {
-    if (title.length === 0) {
-      setError(true)
+    if (
+      title.length === 0 ||
+      subtasksArray
+        .map((value) => value.length === 0)
+        .filter((value) => value == true)[0]
+    ) {
+      if (title.length === 0) {
+        setError(true)
+      } else {
+        setError(false)
+      }
+      if (
+        subtasksArray
+          .map((value) => value.length === 0)
+          .filter((value) => value == true)[0]
+      ) {
+        setArrayError(subtasksArray.map((value) => value.length === 0))
+      }
     } else {
-      setError(false)
-    }
-    if (
-      subtasksArray
-        .map((value) => value.length === 0)
-        .filter((value) => value == true)[0]
-    ) {
-      setArrayError(subtasksArray.map((value) => value.length === 0))
-    }
-    if (
-      error &&
-      subtasksArray
-        .map((value) => value.length === 0)
-        .filter((value) => value == true)[0]
-    ) {
       createTask()
     }
   }
@@ -93,11 +94,11 @@ export default function AddTask() {
         isCompleted: false,
       })),
     })
-    subtasksArray.map((value) =>
-      value.length === 0
-        ? setArrayError((prev) => [...prev], 'true')
-        : setArrayError((prev) => [...prev], 'false')
-    )
+    // subtasksArray.map((value) =>
+    //   value.length === 0
+    //     ? setArrayError((prev) => [...prev], 'true')
+    //     : setArrayError((prev) => [...prev], 'false')
+    // )
 
     fetch.setData(newData)
     fetch.setAddTaskModalDisplay(false)
@@ -108,11 +109,10 @@ export default function AddTask() {
     setTitle('')
     setDescription('')
     setSubtasksArray([])
+    setSubtaskIndex(0)
+    setError(false)
+    setArrayError([])
   }, [fetch.toggleResetValue])
-
-  useEffect(() => {
-    console.log(arrayError)
-  }, [arrayError])
 
   return (
     <>
@@ -130,7 +130,7 @@ export default function AddTask() {
           <h1 className='text-lg font-extrabold mb-5'>Add New Task</h1>
           {/* TITLE */}
           <p className='text-sm text-gray-light font-bold mb-2'>Title</p>
-          <div className='flex items-center mb-3'>
+          <div className='flex items-center justify-end mb-3'>
             <input
               type='text'
               placeholder='e.g. Take coffee break'
@@ -141,7 +141,7 @@ export default function AddTask() {
               onChange={() => setTitle(event.target.value)}
             />
             {error && (
-              <div className='absolute right-[580px] text-red text-[14px]'>
+              <div className='absolute mr-3 text-red text-[14px]'>
                 Can't be empty
               </div>
             )}
@@ -161,10 +161,7 @@ export default function AddTask() {
           {subtasksArray &&
             subtasksArray.map((value, index) => {
               return (
-                <div
-                  className='flex items-center justify-center mb-3'
-                  key={index}
-                >
+                <div className='flex items-center justify-end mb-3' key={index}>
                   <input
                     type='text'
                     placeholder='e.g. Make coffee'
@@ -176,7 +173,7 @@ export default function AddTask() {
                     id={`subtask`}
                   />
                   {arrayError[index] ? (
-                    <div className='text-red text-[14px] absolute right-[610px]'>
+                    <div className='text-red text-[14px] absolute mr-11'>
                       Can't be empty
                     </div>
                   ) : (

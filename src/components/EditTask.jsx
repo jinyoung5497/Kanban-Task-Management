@@ -6,6 +6,9 @@ export default function EditTask() {
   const fetch = useFetch()
   const editTaskRef = useRef()
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [titleError, setTitleError] = useState(false)
+  const [arrayError, setArrayError] = useState(false)
+  const [toggleResetValue, setToggleResetValue] = useState(false)
 
   useEffect(() => {
     if (fetch.editTaskModalDisplay) {
@@ -23,6 +26,8 @@ export default function EditTask() {
     if (editTaskRef.current && !editTaskRef.current.contains(e.target)) {
       fetch.setEditTaskModalDisplay(false)
       fetch.setToggleEditTask((prev) => !prev)
+      setToggleResetValue((prev) => !prev)
+      saveChanges()
     }
   }
 
@@ -53,10 +58,42 @@ export default function EditTask() {
   }
 
   const saveChanges = () => {
-    fetch.setToggleEditTask((prev) => !prev)
-    fetch.setEditTaskModalDisplay(false)
-    console.log(fetch.currentStatus)
+    if (
+      fetch.taskTitle.length === 0 ||
+      fetch.subtasksArray
+        .map((value) => value.title.length === 0)
+        .filter((value) => value == true)[0]
+    ) {
+      if (fetch.taskTitle.length === 0) {
+        setTitleError(true)
+      } else {
+        setTitleError(false)
+      }
+      if (
+        fetch.subtasksArray
+          .map((value) => value.title.length === 0)
+          .filter((value) => value == true)[0]
+      ) {
+        setArrayError(
+          fetch.subtasksArray.map((value) => value.title.length === 0)
+        )
+      }
+    } else {
+      fetch.setToggleEditTask((prev) => !prev)
+      fetch.setEditTaskModalDisplay(false)
+      console.log(fetch.currentStatus)
+      setToggleResetValue((prev) => !prev)
+    }
   }
+
+  useEffect(() => {
+    setTitleError(false)
+    setArrayError([])
+  }, [toggleResetValue])
+
+  // edit task click outside still updates
+  // edit board click outside still updates
+  // edit task subtask error doesn't reset
 
   return (
     <>
@@ -74,20 +111,29 @@ export default function EditTask() {
           <h1 className='text-lg font-extrabold mb-5'>Edit Task</h1>
           {/* TITLE */}
           <p className='text-sm text-gray-light font-bold mb-2'>Title</p>
-          <input
-            type='text'
-            placeholder='e.g. Take coffee break'
-            value={fetch.taskTitle}
-            className='p-2 text-[14px] border-[1px] border-gray-bright rounded-md w-full mb-3'
-            onChange={() => fetch.setTaskTitle(event.target.value)}
-          />
+          <div className='flex items-center justify-end mb-3'>
+            <input
+              type='text'
+              placeholder='e.g. Take coffee break'
+              value={fetch.taskTitle}
+              className={`p-2 text-[14px] border-[1px] outline-none focus:border-purple border-gray-bright rounded-md w-full ${
+                titleError && 'border-red focus:border-red'
+              }`}
+              onChange={() => fetch.setTaskTitle(event.target.value)}
+            />
+            {titleError && (
+              <div className='absolute mr-3 text-[14px] text-red'>
+                Can't be empty
+              </div>
+            )}
+          </div>
           {/* DESCRIPTION */}
           <p className='text-sm text-gray-light font-bold mb-2'>Description</p>
           <textarea
             type='text'
             placeholder="e.g. It's always good to take a break."
             value={fetch.taskDescription}
-            className='p-2 text-[14px] border-[1px] border-gray-bright rounded-md w-full mb-3 h-32 break-all align-top flex items-start justify-start flex-wrap'
+            className='p-2 text-[14px] border-[1px] border-gray-bright rounded-md w-full mb-3 h-32 break-all align-top flex items-start justify-start flex-wrap outline-none focus:border-purple'
             onChange={() => fetch.setTaskDescription(event.target.value)}
           />
           {/* SUBTASKS */}
@@ -96,14 +142,13 @@ export default function EditTask() {
           {fetch.subtasksArray &&
             fetch.subtasksArray.map((value, index) => {
               return (
-                <div
-                  className='flex items-center justify-center mb-3'
-                  key={index}
-                >
+                <div className='flex items-center justify-end mb-3' key={index}>
                   <input
                     type='text'
                     placeholder='e.g. Make coffee'
-                    className='p-2 text-[14px] border-[1px] border-gray-bright rounded-md w-full'
+                    className={`p-2 text-[14px] outline-none focus:border-purple border-[1px] border-gray-bright rounded-md w-full ${
+                      arrayError[index] && 'border-red focus:border-red'
+                    }`}
                     onChange={() => updateSubtask(index)}
                     value={value.title}
                   />
@@ -113,6 +158,11 @@ export default function EditTask() {
                     className='w-4 h-4 ml-4'
                     onClick={() => deleteSubtasks(index)}
                   />
+                  {arrayError[index] && (
+                    <div className='absolute mr-11 text-[14px] text-red'>
+                      Can't be empty
+                    </div>
+                  )}
                 </div>
               )
             })}
@@ -132,7 +182,7 @@ export default function EditTask() {
               placeholder={fetch.currentStatus}
               readOnly
               onClick={() => setDropdownOpen(true)}
-              className='w-full text-[14px] border-[1px] border-gray-bright p-2 rounded-md placeholder:text-black'
+              className='w-full text-[14px] border-[1px] border-gray-bright p-2 rounded-md placeholder:text-black focus:border-purple outline-none'
             />
             {dropdownOpen && (
               <ul className='relative p-3 rounded-md'>

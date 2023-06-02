@@ -47,6 +47,7 @@ export const FetchProvider = ({ children }) => {
   const [subtasksArray, setSubtasksArray] = useState([])
   const [toggleDeleteTask, setToggleDeleteTask] = useState(false)
   const [toggleResetValue, setToggleResetValue] = useState(false)
+  const [disableTask, setDisableTask] = useState(false)
 
   const initUpdate = useRef(false)
   const initUpdateTasks = useRef(false)
@@ -75,7 +76,11 @@ export const FetchProvider = ({ children }) => {
     if (initData.current) {
       setMainBoard(data[boardIndex].columns)
       setBoardName(data[boardIndex].name)
-      setDropStatus(data[boardIndex].columns[0].name)
+      data[boardIndex].columns[0] &&
+        setDropStatus(data[boardIndex].columns[0].name)
+      !data[boardIndex].columns[0]
+        ? setDisableTask(true)
+        : setDisableTask(false)
     } else {
       initData.current = true
     }
@@ -300,6 +305,9 @@ export const FetchProvider = ({ children }) => {
         setToggleDeleteTask,
         setToggleResetValue,
         toggleResetValue,
+        name,
+        disableTask,
+        setDisableTask,
       }}
     >
       {children}

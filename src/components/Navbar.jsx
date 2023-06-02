@@ -47,7 +47,9 @@ export default function Navbar() {
       </div>
       <div className='ml-5 text-xl font-bold'>{fetch.boardName}</div>
       <button
-        className='ml-auto bg-purple p-3 px-5 text-white rounded-full hover:bg-purple-light'
+        className={`ml-auto bg-purple p-3 px-5 text-white rounded-full hover:bg-purple-light ${
+          fetch.disableTask && 'bg-purple-light pointer-events-none'
+        }`}
         onClick={openAddNewTask}
       >
         + Add New Task

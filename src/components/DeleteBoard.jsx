@@ -53,13 +53,13 @@ export default function DeleteBoard() {
         </p>
         <div className='flex'>
           <button
-            className='bg-red block w-full rounded-full mr-1 p-3 text-linen  text-md'
+            className='bg-red block hover:bg-red-light w-full rounded-full mr-1 p-3 text-linen  text-md'
             onClick={deleteBoard}
           >
             Delete
           </button>
           <button
-            className='bg-gray-bright block w-full rounded-full ml-1 p-3 text-purple font-bold text-md'
+            className='bg-gray-bright hover:bg-indigo-200 block w-full rounded-full ml-1 p-3 text-purple font-bold text-md'
             onClick={() => fetch.setDeleteBoardModalDisplay(false)}
           >
             Cancel

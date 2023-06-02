@@ -5,6 +5,6 @@ git branch -M main
 git remote add origin https://github.com/jinyoung5497/Kanban-Task-Management.git
 git push -u origin main
 
-git commit -m "edit task"
+git commit -m "task validation"
 git branch -M main
 git push -u origin main
