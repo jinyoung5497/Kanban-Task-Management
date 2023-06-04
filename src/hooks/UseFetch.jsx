@@ -59,10 +59,13 @@ export const FetchProvider = ({ children }) => {
   const initEditTask = useRef(false)
   const initDeleteTask = useRef(false)
 
+  const url = 'http://localhost:4000'
+  const renderUrl = 'https://kanban-server-vyxt.onrender.com'
+
   //* ================= Get Data from server =============
 
   const getBoards = useEffect(() => {
-    fetch(`http://localhost:4000/api/boards/data/645730237aace50e6a6193b0`)
+    fetch(`${renderUrl}/api/boards/data/645730237aace50e6a6193b0`)
       .then((res) => res.json())
       .then((data) => {
         setData(data.boards)
@@ -191,18 +194,15 @@ export const FetchProvider = ({ children }) => {
 
   const postData = useEffect(() => {
     if (initUpdateTasks.current) {
-      fetch(
-        'http://localhost:4000/api/boards/newboard/645730237aace50e6a6193af',
-        {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            boards: data,
-          }),
-        }
-      )
+      fetch(`${renderUrl}/api/boards/newboard/645730237aace50e6a6193af`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          boards: data,
+        }),
+      })
         .then((res) => {
           return res.json()
         })
