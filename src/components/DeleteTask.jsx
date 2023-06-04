@@ -33,13 +33,15 @@ export default function DeleteTask() {
       <div
         className={`${
           fetch.deleteTaskModalDisplay ? 'block' : 'hidden'
-        } w-screen h-screen flex items-center justify-center bg-[#6b6b6b77]`}
+        } w-screen h-screen flex items-center justify-center ${
+          fetch.darkMode ? 'bg-[#2c2c2c77]' : 'bg-[#6b6b6b77]'
+        }`}
       >
         <div
           ref={deleteTaskRef}
-          className={`${
-            fetch.deleteTaskModalDisplay ? 'block' : 'hidden'
-          } bg-white w-[500px] p-8 rounded-lg`}
+          className={`${fetch.deleteTaskModalDisplay ? 'block' : 'hidden'} ${
+            fetch.darkMode ? 'bg-gray-dark' : 'bg-white'
+          } w-[500px] p-8 rounded-lg`}
         >
           <h1 className='text-lg font-extrabold mb-5 text-red'>
             Delete this task?
@@ -50,13 +52,13 @@ export default function DeleteTask() {
           </p>
           <div className='flex'>
             <button
-              className='bg-red block w-full rounded-full mr-1 p-3 text-linen  text-md'
+              className='bg-red hover:bg-red-light block w-full rounded-full mr-1 p-3 text-linen  text-md'
               onClick={deleteTask}
             >
               Delete
             </button>
             <button
-              className='bg-gray-bright block w-full rounded-full ml-1 p-3 text-purple font-bold text-md'
+              className='bg-gray-bright hover:bg-indigo-200 block w-full rounded-full ml-1 p-3 text-purple font-bold text-md'
               onClick={() => fetch.setDeleteTaskModalDisplay(false)}
             >
               Cancel

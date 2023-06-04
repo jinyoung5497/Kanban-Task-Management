@@ -36,13 +36,15 @@ export default function DeleteBoard() {
     <div
       className={`${
         fetch.deleteBoardModalDisplay ? 'block' : 'hidden'
-      } w-screen h-screen flex items-center justify-center bg-[#6b6b6b77]`}
+      } w-screen h-screen flex items-center justify-center ${
+        fetch.darkMode ? 'bg-[#2c2c2c77]' : 'bg-[#6b6b6b77]'
+      }`}
     >
       <div
         ref={deleteBoardRef}
-        className={`${
-          fetch.deleteBoardModalDisplay ? 'block' : 'hidden'
-        } bg-white w-[500px] p-8 rounded-lg`}
+        className={`${fetch.deleteBoardModalDisplay ? 'block' : 'hidden'} ${
+          fetch.darkMode ? 'bg-gray-dark' : 'bg-white'
+        } w-[500px] p-8 rounded-lg`}
       >
         <h1 className='text-lg font-extrabold mb-5 text-red'>
           Delete this board?

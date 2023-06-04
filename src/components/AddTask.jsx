@@ -94,11 +94,6 @@ export default function AddTask() {
         isCompleted: false,
       })),
     })
-    // subtasksArray.map((value) =>
-    //   value.length === 0
-    //     ? setArrayError((prev) => [...prev], 'true')
-    //     : setArrayError((prev) => [...prev], 'false')
-    // )
 
     fetch.setData(newData)
     fetch.setAddTaskModalDisplay(false)
@@ -119,25 +114,43 @@ export default function AddTask() {
       <div
         className={` ${
           fetch.addTaskModalDisplay ? 'block' : 'hidden'
-        } w-screen h-screen flex items-center justify-center bg-[#6b6b6b77]`}
+        } w-screen h-screen flex items-center justify-center ${
+          fetch.darkMode ? 'bg-[#2c2c2c77]' : 'bg-[#6b6b6b77]'
+        }`}
       >
         <div
-          className={`${
-            fetch.addTaskModalDisplay ? 'block' : 'hidden'
-          } bg-white w-[500px] p-8 rounded-lg`}
+          className={`${fetch.addTaskModalDisplay ? 'block' : 'hidden'} ${
+            fetch.darkMode ? 'bg-gray-dark' : 'bg-white'
+          } w-[500px] p-8 rounded-lg`}
           ref={addTaskRef}
         >
-          <h1 className='text-lg font-extrabold mb-5'>Add New Task</h1>
+          <h1
+            className={`text-lg font-extrabold mb-5 ${
+              fetch.darkMode ? 'text-white' : 'text-black'
+            }`}
+          >
+            Add New Task
+          </h1>
           {/* TITLE */}
-          <p className='text-sm text-gray-light font-bold mb-2'>Title</p>
+          <p
+            className={`text-sm font-bold mb-2 ${
+              fetch.darkMode ? 'text-white' : 'text-gray-light'
+            }`}
+          >
+            Title
+          </p>
           <div className='flex items-center justify-end mb-3'>
             <input
               type='text'
               placeholder='e.g. Take coffee break'
               value={title}
               className={`p-2 border-[1px] border-gray-bright text-[14px] rounded-md w-full  outline-none focus:border-purple ${
-                error && 'border-red focus:border-red'
-              }`}
+                fetch.darkMode
+                  ? `bg-gray-dark text-white ${
+                      error ? 'border-red' : 'border-gray-med'
+                    }`
+                  : ''
+              } ${error && 'border-red focus:border-red'}`}
               onChange={() => setTitle(event.target.value)}
             />
             {error && (
@@ -147,16 +160,30 @@ export default function AddTask() {
             )}
           </div>
           {/* DESCRIPTION */}
-          <p className='text-sm text-gray-light font-bold mb-2'>Description</p>
+          <p
+            className={`text-sm ${
+              fetch.darkMode ? 'text-white' : 'text-gray-light'
+            } font-bold mb-2`}
+          >
+            Description
+          </p>
           <textarea
             type='text'
             placeholder="e.g. It's always good to take a break."
             value={description}
-            className='p-2 text-[14px] border-[1px] border-gray-bright rounded-md w-full mb-3 h-32 break-all align-top flex items-start justify-start flex-wrap outline-none focus:border-purple'
+            className={`p-2 text-[14px] border-[1px] border-gray-bright rounded-md w-full mb-3 h-32 break-all align-top flex items-start justify-start flex-wrap outline-none focus:border-purple ${
+              fetch.darkMode ? `bg-gray-dark text-white border-gray-med` : ''
+            }`}
             onChange={() => setDescription(event.target.value)}
           />
           {/* SUBTASKS */}
-          <p className='text-sm text-gray-light font-bold mb-2'>Subtasks</p>
+          <p
+            className={`text-sm ${
+              fetch.darkMode ? 'text-white' : 'text-gray-light'
+            } font-bold mb-2`}
+          >
+            Subtasks
+          </p>
           {/* SUBTASKS INPUT */}
           {subtasksArray &&
             subtasksArray.map((value, index) => {
@@ -166,6 +193,12 @@ export default function AddTask() {
                     type='text'
                     placeholder='e.g. Make coffee'
                     className={`p-2 text-[14px] border-[1px] border-gray-bright rounded-md w-full outline-none focus:border-purple ${
+                      fetch.darkMode
+                        ? `bg-gray-dark text-white ${
+                            arrayError[index] ? 'border-red' : 'border-gray-med'
+                          }`
+                        : ''
+                    } ${
                       arrayError[index] ? 'border-red focus:border-red' : ''
                     }`}
                     onChange={() => updateSubtask(index)}
@@ -189,12 +222,18 @@ export default function AddTask() {
               )
             })}
           <button
-            className='bg-gray-bright block w-full rounded-full mb-5 p-3 text-purple font-bold text-[14px] hover:bg-indigo-200'
+            className='bg-gray-bright block w-full rounded-full my-5 p-3 text-purple font-bold text-[14px] hover:bg-indigo-200'
             onClick={newSubtask}
           >
             + Add New Subtask
           </button>
-          <p className='text-sm text-gray-light font-bold mb-2'>Status</p>
+          <p
+            className={`text-sm ${
+              fetch.darkMode ? 'text-white' : 'text-gray-light'
+            } font-bold mb-2`}
+          >
+            Status
+          </p>
 
           {/* ============ STATUS DROP DOWN ============ */}
           <div>
@@ -204,22 +243,31 @@ export default function AddTask() {
                 value={fetch.dropStatus}
                 readOnly
                 onClick={() => setDropdownOpen((prev) => !prev)}
-                className='w-full text-[14px] border-[1px] border-gray-bright p-2 rounded-md outline-none focus:border-purple'
+                className={`w-full text-[14px] border-[1px] border-gray-bright p-2 rounded-md outline-none focus:border-purple cursor-pointer ${
+                  fetch.darkMode
+                    ? 'bg-gray-dark border-gray-med text-white'
+                    : ''
+                }`}
               />
               <img
                 src={icon4}
                 alt='checkdown icon'
-                className='w-3 h-2 relative right-8'
+                className='w-3 h-2 relative right-8 cursor-pointer'
+                onClick={() => setDropdownOpen((prev) => !prev)}
               />
             </div>
             {dropdownOpen && (
-              <ul className='relative p-3 rounded-md'>
+              <ul
+                className={`relative p-3 mt-2 rounded-md ${
+                  fetch.darkMode ? 'bg-black-light' : ''
+                }`}
+              >
                 {fetch.mainBoard.map((value, index) => {
                   return (
                     <li
                       key={index}
                       onClick={() => handleDropdown(value.name, index)}
-                      className='mb-1 text-[14px] text-gray-light'
+                      className={`mb-1 text-[14px] text-gray-light cursor-pointer`}
                     >
                       {value.name}
                     </li>

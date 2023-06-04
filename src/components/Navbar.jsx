@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useFetch } from '../hooks/UseFetch'
-import { icon12, icon11 } from '../assets'
+import { icon12, icon11, icon13 } from '../assets'
 
 export default function Navbar() {
   const fetch = useFetch()
@@ -41,11 +41,27 @@ export default function Navbar() {
   }
 
   return (
-    <div className='z-10 w-full flex bg-white items-center border-b-[1px] border-gray-bright fixed top-0'>
-      <div className='border-r-[1px] border-gray-bright w-[300px] h-[100px] flex items-center pl-8'>
-        <img src={icon12} alt='Main logo' />
+    <div
+      className={`z-10 w-full flex ${
+        fetch.darkMode
+          ? 'bg-gray-dark border-gray-500'
+          : 'bg-white border-gray-bright'
+      } items-center border-b-[1px]  fixed top-0 transform transition duration-500 ease-in-out`}
+    >
+      <div
+        className={`border-r-[1px] ${
+          fetch.darkMode ? 'border-gray-500' : 'border-gray-bright'
+        }  w-[300px] h-[100px] flex items-center pl-8`}
+      >
+        <img src={fetch.darkMode ? icon13 : icon12} alt='Main logo' />
       </div>
-      <div className='ml-5 text-xl font-bold'>{fetch.boardName}</div>
+      <div
+        className={`ml-5 text-xl font-bold ${
+          fetch.darkMode ? 'text-white' : 'text-black'
+        }`}
+      >
+        {fetch.boardName}
+      </div>
       <button
         className={`ml-auto bg-purple p-3 px-5 text-white rounded-full hover:bg-purple-light ${
           fetch.disableTask && 'bg-purple-light pointer-events-none'
@@ -63,7 +79,9 @@ export default function Navbar() {
 
       {/* OPTION MODAL */}
       <div
-        className={`flex flex-col bg-white absolute p-4 rounded-xl text-md w-48  items-start top-20 right-8 z-50 drop-shadow-md gap-y-3 ${
+        className={`flex flex-col ${
+          fetch.darkMode ? 'bg-black-light' : 'bg-white'
+        } absolute p-4 rounded-xl text-md w-48  items-start top-20 right-8 z-50 drop-shadow-md gap-y-3 ${
           openOption ? 'block' : 'hidden'
         }`}
       >

@@ -79,23 +79,41 @@ export default function AddBoard() {
       <div
         className={` ${
           fetch.newBoardModalDisplay ? 'block' : 'hidden'
-        } w-screen h-screen flex items-center justify-center bg-[#6b6b6b77]`}
+        } w-screen h-screen flex items-center justify-center ${
+          fetch.darkMode ? 'bg-[#2c2c2c77]' : 'bg-[#6b6b6b77]'
+        }`}
       >
         <div
-          className={`${
-            fetch.newBoardModalDisplay ? 'block' : 'hidden'
-          } bg-white w-[500px] p-8 rounded-lg`}
+          className={`${fetch.newBoardModalDisplay ? 'block' : 'hidden'} ${
+            fetch.darkMode ? 'bg-gray-dark' : 'bg-white'
+          } w-[500px] p-8 rounded-lg`}
           ref={newBoardRef}
         >
-          <h2 className='text-lg font-extrabold mb-5'>Add New Board</h2>
-          <p className='text-sm text-gray-light font-bold mb-2'>Name</p>
+          <h2
+            className={`text-lg font-extrabold mb-5 ${
+              fetch.darkMode ? 'text-white' : 'text-black'
+            }`}
+          >
+            Add New Board
+          </h2>
+          <p
+            className={`text-sm ${
+              fetch.darkMode ? 'text-white' : 'text-gray-light'
+            } font-bold mb-2`}
+          >
+            Name
+          </p>
           <div className='flex items-center justify-end mb-3'>
             <input
               type='text'
               placeholder='e.g. Web Design'
-              className={`p-2 border-[1px] border-gray-bright outline-none rounded-md w-full focus:border-purple ${
-                error && 'border-red focus:border-red'
-              }`}
+              className={`p-2 border-[1px] border-gray-bright outline-none rounded-md w-full focus:border-purple text-[14px] ${
+                fetch.darkMode
+                  ? `bg-gray-dark text-white ${
+                      error ? 'border-red' : 'border-gray-med'
+                    }`
+                  : ''
+              } ${error && 'border-red focus:border-red'}`}
               value={fetch.name}
               onChange={() => fetch.setName(event.target.value)}
             />
@@ -105,7 +123,13 @@ export default function AddBoard() {
               </div>
             )}
           </div>
-          <p className='text-sm text-gray-light font-bold mb-2'>Columns</p>
+          <p
+            className={`text-sm ${
+              fetch.darkMode ? 'text-white' : 'text-gray-light'
+            } font-bold mb-2`}
+          >
+            Columns
+          </p>
           {fetch.nameArray.map((value, index) => {
             return (
               <div
@@ -114,8 +138,14 @@ export default function AddBoard() {
               >
                 <input
                   type='text'
-                  // placeholder='Enter new name'
-                  className={`w-full placeholder:text-black p-2 border-[1px] border-gray-bright outline-none rounded-md focus:border-purple ${
+                  placeholder='Enter new name'
+                  className={`w-full ${
+                    fetch.darkMode
+                      ? `bg-gray-dark text-white ${
+                          arrayError[index] ? 'border-red' : 'border-gray-med'
+                        }`
+                      : 'border-gray-bright'
+                  } p-2 border-[1px]  outline-none rounded-md focus:border-purple text-[14px] ${
                     arrayError[index] && 'border-red focus:border-red'
                   }`}
                   value={value}
@@ -144,7 +174,7 @@ export default function AddBoard() {
           })}
           <button
             onClick={columnIncrement}
-            className='bg-gray-bright hover:bg-indigo-200 block w-full rounded-full mb-5 p-3 text-purple font-bold text-md'
+            className='bg-gray-bright hover:bg-indigo-200 block w-full rounded-full my-5 p-3 text-purple font-bold text-md'
           >
             + Add New Column
           </button>

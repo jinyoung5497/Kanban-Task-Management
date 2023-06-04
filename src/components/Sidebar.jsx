@@ -1,19 +1,11 @@
 import React, { useState } from 'react'
 import { useFetch } from '../hooks/UseFetch'
 import {
-  icon1,
-  icon3,
-  icon4,
-  icon5,
-  icon6,
   icon7,
-  icon8,
   icon9,
   icon10,
-  icon11,
   icon12,
   icon13,
-  icon14,
   BoardIcon,
   EyeHide,
 } from '../assets'
@@ -50,12 +42,20 @@ export default function Sidebar() {
   return (
     <>
       <div
-        className={`z-20 fixed top-0 w-[300px] bg-white h-screen flex flex-col border-r-[1px] border-gray-bright transform transition duration-500 ease-in-out ${
+        className={`${
+          fetch.darkMode
+            ? 'bg-gray-dark border-gray-500'
+            : 'bg-white border-gray-bright'
+        } z-20 fixed top-0 w-[300px] h-full flex flex-col border-r-[1px]  transform transition duration-500 ease-in-out ${
           fetch.showSidebar ? '-translate-x-96' : '-translate-x-0'
         }`}
       >
         <div className='flex flex-col'>
-          <img src={icon12} alt='logo' className='mb-14 w-40 m-8' />
+          <img
+            src={fetch.darkMode ? icon13 : icon12}
+            alt='logo'
+            className='mb-14 w-40 m-8'
+          />
           <div className='text-gray-light text-sm font-bold tracking-[3px] mx-8 mb-5'>
             ALL BOARDS ({fetch.data.length})
           </div>
@@ -103,7 +103,11 @@ export default function Sidebar() {
 
         <div className='mx-2 mt-auto mb-10'>
           {/* --------DARK MODE TOGGLE------- */}
-          <div className='flex items-center bg-linen p-3 place-content-around rounded-md px-14 w-full mb-3'>
+          <div
+            className={`flex items-center ${
+              fetch.darkMode ? 'bg-black-light' : 'bg-linen'
+            } p-3 place-content-around rounded-md px-14 w-full mb-3 transform transition duration-500 ease-in-out`}
+          >
             <img src={icon9} alt='icon light' />
             <div
               className={`w-10 h-5 bg-purple rounded-full flex items-center cursor-pointer hover:bg-purple-light ${
@@ -126,7 +130,7 @@ export default function Sidebar() {
             <div className='mx-6'>
               <EyeHide colour={hideSidebarColour} />
             </div>
-            <p className=' font-bold text-md my-4 '>Hide Sidebar</p>
+            <p className='font-bold text-md my-4 '>Hide Sidebar</p>
           </div>
         </div>
       </div>

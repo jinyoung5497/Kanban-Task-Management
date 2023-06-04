@@ -84,6 +84,7 @@ export default function EditBoard() {
   useEffect(() => {
     setTitleError(false)
     setArrayError(false)
+    console.log(fetch.mainBoard.map((value) => false))
   }, [toggleResetValue])
 
   return (
@@ -91,23 +92,41 @@ export default function EditBoard() {
       <div
         className={` ${
           fetch.editBoardModalDisplay ? 'block' : 'hidden'
-        }  w-screen h-screen flex items-center justify-center bg-[#6b6b6b77]`}
+        }  w-screen h-screen flex items-center justify-center ${
+          fetch.darkMode ? 'bg-[#2c2c2c77]' : 'bg-[#6b6b6b77]'
+        }`}
       >
         <div
-          className={`${
-            fetch.editBoardModalDisplay ? 'block' : 'hidden'
-          } bg-white w-[500px] p-8 rounded-lg`}
+          className={`${fetch.editBoardModalDisplay ? 'block' : 'hidden'} ${
+            fetch.darkMode ? 'bg-gray-dark' : 'bg-white'
+          } w-[500px] p-8 rounded-lg`}
           ref={editBoardRef}
         >
-          <h2 className='text-lg font-extrabold mb-5'>Edit Board</h2>
-          <p className='text-sm text-gray-light font-bold mb-2'>Board Name</p>
+          <h2
+            className={`text-lg font-extrabold mb-5 ${
+              fetch.darkMode ? 'text-white' : 'text-black'
+            }`}
+          >
+            Edit Board
+          </h2>
+          <p
+            className={`text-sm font-bold mb-2 ${
+              fetch.darkMode ? 'text-white' : 'text-gray-light'
+            }`}
+          >
+            Board Name
+          </p>
           <div className='flex items-center justify-end  mb-3'>
             <input
               type='text'
               value={fetch.boardName}
-              className={`p-2 border-[1px] border-gray-bright rounded-md w-full outline-none focus:border-purple ${
-                titleError && 'border-red focus:border-red'
-              }`}
+              className={`p-2 border-[1px] text-[14px] border-gray-bright rounded-md w-full outline-none focus:border-purple ${
+                fetch.darkMode
+                  ? `bg-gray-dark ${
+                      titleError ? 'border-red' : 'border-gray-med'
+                    } text-white`
+                  : ''
+              } ${titleError && 'border-red focus:border-red'}`}
               onChange={updateName}
             />
             {titleError && (
@@ -116,7 +135,11 @@ export default function EditBoard() {
               </div>
             )}
           </div>
-          <p className='text-sm text-gray-light font-bold mb-2'>
+          <p
+            className={`text-sm ${
+              fetch.darkMode ? 'text-white' : 'text-gray-light'
+            } font-bold mb-2`}
+          >
             Board Columns
           </p>
           {fetch.mainBoard.map((value, index) => {
@@ -127,10 +150,14 @@ export default function EditBoard() {
               >
                 <input
                   type='text'
-                  // placeholder='Enter new name'
-                  className={`w-full placeholder:text-black p-2 border-[1px] border-gray-bright rounded-md outline-none focus:border-purple ${
-                    arrayError[index] && 'border-red focus:border-red'
-                  }`}
+                  placeholder='Enter new name'
+                  className={`w-full p-2 border-[1px] border-gray-bright rounded-md outline-none focus:border-purple ${
+                    fetch.darkMode
+                      ? `bg-gray-dark ${
+                          arrayError[index] ? 'border-red' : 'border-gray-med'
+                        } text-white`
+                      : ''
+                  } ${arrayError[index] && 'border-red focus:border-red'}`}
                   value={value.name}
                   onMouseDown={() => {
                     setIndexValue(index)
@@ -157,7 +184,7 @@ export default function EditBoard() {
           })}
           <button
             onClick={columnIncrement}
-            className='bg-gray-bright hover:bg-indigo-200 block w-full rounded-full mb-5 p-3 text-purple font-bold text-md'
+            className='bg-gray-bright hover:bg-indigo-200 block w-full rounded-full my-5 p-3 text-purple font-bold text-md'
           >
             + Add New Column
           </button>

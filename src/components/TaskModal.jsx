@@ -32,6 +32,7 @@ export default function TaskModal() {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
       fetch.setModalDisplay(false)
       setDropdownOpen(false)
+      setOpenOption(false)
     }
   }
 
@@ -64,19 +65,25 @@ export default function TaskModal() {
   return (
     <>
       <div
-        className={`${
-          fetch.modalDisplay ? 'block' : 'hidden'
-        } bg-[#6b6b6b77] w-screen h-screen flex items-center justify-center`}
+        className={`${fetch.modalDisplay ? 'block' : 'hidden'} ${
+          fetch.darkMode ? 'bg-[#2c2c2c77]' : 'bg-[#6b6b6b77]'
+        } w-screen h-screen flex items-center justify-center`}
       >
         <div
-          className={`${
-            fetch.modalDisplay ? 'block' : 'hidden'
-          } bg-white w-[500px] p-8 rounded-lg absolute`}
+          className={`${fetch.modalDisplay ? 'block' : 'hidden'} ${
+            fetch.darkMode ? 'bg-gray-dark' : 'bg-white'
+          } w-[500px] p-8 rounded-lg absolute`}
           ref={modalRef}
         >
           <div className='flex items-center mb-5'>
             {/* TITLE */}
-            <h1 className='text-lg font-extrabold'>{fetch.taskTitle}</h1>
+            <h1
+              className={`text-lg font-extrabold ${
+                fetch.darkMode ? 'text-white' : 'text-black'
+              }`}
+            >
+              {fetch.taskTitle}
+            </h1>
             {/* OPTION */}
             <div
               className='w-8 h-8 ml-auto flex items-center justify-center cursor-pointer flex-col'
@@ -86,7 +93,9 @@ export default function TaskModal() {
               <div
                 className={`${
                   openOption ? 'block' : 'hidden'
-                } absolute top-20 z-10 w-40 bg-white rounded-md flex flex-col justify-center items-start p-5 gap-y-3 text-md shadow-lg`}
+                } absolute top-20 z-10 w-40 ${
+                  fetch.darkMode ? 'bg-black-light' : 'bg-white'
+                } rounded-md flex flex-col justify-center items-start p-5 gap-y-3 text-md shadow-lg`}
               >
                 <button className='text-gray-light' onClick={openEditTask}>
                   Edit Task
@@ -102,7 +111,11 @@ export default function TaskModal() {
             {fetch.taskDescription}
           </p>
           {/* SUBTASKS */}
-          <p className='text-[13px] text-gray-light font-bold mb-3'>
+          <p
+            className={`text-[13px] ${
+              fetch.darkMode ? 'text-white' : 'text-gray-light'
+            } font-bold mb-3`}
+          >
             Subtasks (
             {
               fetch.subtaskData.filter((value) => value.isCompleted == true)
@@ -114,13 +127,19 @@ export default function TaskModal() {
           {fetch.subtaskData.map((value, index) => (
             <div
               key={index}
-              className='mb-3 bg-gray-bright p-3 rounded-sm text-sm text-gray-500 font-bold flex items-center cursor-pointer hover:bg-indigo-200 hover:text-black'
+              className={`mb-3 ${
+                fetch.darkMode
+                  ? 'bg-black-light hover:bg-[#39395b]'
+                  : 'bg-gray-bright hover:bg-indigo-200'
+              } p-3 rounded-sm text-sm text-gray-500 font-bold flex items-center cursor-pointer  hover:text-black`}
               onClick={() => subtaskBoolean(value, index)}
             >
               <div
                 className={`w-4 h-4 rounded-sm mr-4 flex justify-center ${
                   fetch.subtaskData[index].isCompleted
                     ? 'bg-purple'
+                    : fetch.darkMode
+                    ? 'bg-gray-dark border-[1px] border-gray-med'
                     : 'bg-white'
                 }`}
               >
@@ -136,6 +155,8 @@ export default function TaskModal() {
                 className={`flex-1 ${
                   fetch.subtaskData[index].isCompleted
                     ? 'text-gray line-through'
+                    : fetch.darkMode
+                    ? 'text-white'
                     : 'text-black'
                 }`}
               >
@@ -144,7 +165,11 @@ export default function TaskModal() {
             </div>
           ))}
           {/* CURRENT STATUS */}
-          <p className='text-gray-light text-sm mb-2 font-bold'>
+          <p
+            className={`${
+              fetch.darkMode ? 'text-white' : 'text-gray-light'
+            } text-sm mb-2 font-bold`}
+          >
             Current Status
           </p>
           <div>
@@ -155,7 +180,11 @@ export default function TaskModal() {
                 placeholder={fetch.currentStatus}
                 readOnly
                 onClick={() => setDropdownOpen((prev) => !prev)}
-                className='w-full border-[1px] border-gray-bright p-2 rounded-md placeholder:text-gray text-[14px] cursor-pointer outline-none focus:border-purple'
+                className={`w-full border-[1px]  p-2 rounded-md placeholder:text-gray text-[14px] cursor-pointer outline-none focus:border-purple ${
+                  fetch.darkMode
+                    ? 'bg-gray-dark border-gray-med text-white'
+                    : 'border-gray-bright'
+                }`}
               />
               <img
                 src={icon4}
@@ -165,7 +194,11 @@ export default function TaskModal() {
               />
             </div>
             {dropdownOpen && (
-              <ul className='absolute bg-white w-[430px] p-3 rounded-md cursor-pointer'>
+              <ul
+                className={`absolute ${
+                  fetch.darkMode ? 'bg-black-light' : 'bg-white'
+                } w-[430px] mt-2 p-3 rounded-md cursor-pointer`}
+              >
                 {fetch.mainBoard.map((value, index) => {
                   return (
                     <li

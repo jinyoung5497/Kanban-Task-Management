@@ -17,7 +17,11 @@ export default function App() {
   const fetch = useFetch()
   return (
     <>
-      <div>
+      <div
+        className={`${
+          fetch.darkMode ? 'bg-black-light' : 'bg-linen'
+        } w-[100vw] `}
+      >
         <Navbar />
         <Sidebar />
         <MainBoard />

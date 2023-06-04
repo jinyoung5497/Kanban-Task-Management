@@ -3,7 +3,7 @@ import { useFetch } from '../hooks/UseFetch'
 
 export default function MainBoard() {
   const fetch = useFetch()
-  const [color, setColor] = useState(['#49c4e5', '#8471f2', '#67e2ae'])
+  const [color, setColor] = useState(['blue-400', 'purple', 'teal-400'])
 
   const getTasks = (value, index) => {
     fetch.setModalDisplay(true)
@@ -28,11 +28,17 @@ export default function MainBoard() {
   return (
     <>
       <div
-        className={`-z-10 mt-[101px] h-screen w-full transform transition duration-500 ease-in-out ${
+        className={`-z-10 mt-[101px] h-fit w-fit transform transition duration-500 ease-in-out ${
           fetch.showSidebar ? '-translate-x-0' : 'translate-x-[300px]'
         }`}
       >
-        <div className={`w-full h-full px-10 pt-5 bg-linen flex`}>
+        <div className='bg-blue-400'></div>
+        <div className='bg-teal-400'></div>
+        <div
+          className={`w-full min-w-[1200px] min-h-[1200px] h-full px-10 pt-5 ${
+            fetch.darkMode ? 'bg-black-light' : 'bg-linen'
+          } flex transform transition duration-500 ease-in-out`}
+        >
           {fetch.mainBoard.map((value, index) => {
             return (
               <div
@@ -41,11 +47,11 @@ export default function MainBoard() {
                 onClick={() => handleColumnIndex(index)}
               >
                 <div className='ml-4 flex items-center text-gray-light text-sm font-bold tracking-[2px]'>
-                  <section
-                    className={`w-4 h-4 bg-[${
+                  <div
+                    className={`w-4 h-4 bg-${
                       color[index % color.length]
-                    }] rounded-full mr-2`}
-                  ></section>
+                    } rounded-full mr-2`}
+                  ></div>
                   {value.name && value.name.toUpperCase()} (
                   {value.tasks ? value.tasks.length : 0})
                 </div>
@@ -55,7 +61,11 @@ export default function MainBoard() {
                         return (
                           <div
                             key={index}
-                            className='bg-white m-4 p-5 rounded-xl drop-shadow-md cursor-pointer hover:text-purple'
+                            className={`${
+                              fetch.darkMode
+                                ? 'bg-gray-dark text-white'
+                                : 'bg-white'
+                            } m-4 p-5 rounded-xl drop-shadow-md cursor-pointer hover:text-purple min-w-[250px]`}
                             onClick={() => getTasks(value, index)}
                           >
                             <div className='font-bold mb-2'>{value.title}</div>
@@ -76,7 +86,7 @@ export default function MainBoard() {
             )
           })}
           {fetch.mainBoard.length == 0 ? (
-            <div className='flex flex-col items-center justify-center w-full h-full'>
+            <div className='flex flex-col items-center justify-center'>
               <p className='text-lg text-gray-light font-bold mb-8'>
                 This board is empty. Create a new column to get started.
               </p>
@@ -89,7 +99,9 @@ export default function MainBoard() {
             </div>
           ) : (
             <div
-              className='w-[350px] h-11/12 bg-gray-bright rounded-xl flex items-center justify-center text-gray-light font-bold text-xl ml-5 my-10 cursor-pointer hover:text-purple'
+              className={`w-[350px] min-w-[250px] h-11/12  rounded-xl flex items-center justify-center text-gray-light font-bold text-xl ml-5 my-10 cursor-pointer hover:text-purple transform transition duration-500 ease-in-out ${
+                fetch.darkMode ? 'bg-gray-dark' : 'bg-gray-bright'
+              }`}
               onClick={editBoard}
             >
               + New Column
