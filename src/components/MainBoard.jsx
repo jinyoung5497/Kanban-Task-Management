@@ -28,14 +28,14 @@ export default function MainBoard() {
   return (
     <>
       <div
-        className={`-z-10 mt-[101px] h-fit w-fit transform transition duration-500 ease-in-out ${
+        className={`pt-[101px] z-0 h-fit w-fit transform transition duration-500 ease-in-out ${
           fetch.showSidebar ? '-translate-x-0' : 'translate-x-[300px]'
         }`}
       >
         <div className='bg-blue-400'></div>
         <div className='bg-teal-400'></div>
         <div
-          className={`w-full min-w-[1200px] min-h-[1200px] h-full px-10 pt-5 ${
+          className={`w-full h-full px-10 py-5 ${
             fetch.darkMode ? 'bg-black-light' : 'bg-linen'
           } flex transform transition duration-500 ease-in-out`}
         >
@@ -43,7 +43,7 @@ export default function MainBoard() {
             return (
               <div
                 key={index}
-                className={`w-[350px]`}
+                className={`w-[350px] lg:w-fit`}
                 onClick={() => handleColumnIndex(index)}
               >
                 <div className='ml-4 flex items-center text-gray-light text-sm font-bold tracking-[2px]'>
@@ -65,7 +65,7 @@ export default function MainBoard() {
                               fetch.darkMode
                                 ? 'bg-gray-dark text-white'
                                 : 'bg-white'
-                            } m-4 p-5 rounded-xl drop-shadow-md cursor-pointer hover:text-purple min-w-[250px]`}
+                            } m-4 p-5 rounded-xl drop-shadow-md cursor-pointer hover:text-purple min-w-[250px] lg:min-w-fit`}
                             onClick={() => getTasks(value, index)}
                           >
                             <div className='font-bold mb-2'>{value.title}</div>
@@ -85,21 +85,9 @@ export default function MainBoard() {
               </div>
             )
           })}
-          {fetch.mainBoard.length == 0 ? (
-            <div className='flex flex-col items-center justify-center'>
-              <p className='text-lg text-gray-light font-bold mb-8'>
-                This board is empty. Create a new column to get started.
-              </p>
-              <button
-                className=' bg-purple p-3 px-5 text-white rounded-full hover:bg-purple-light'
-                onClick={editBoard}
-              >
-                + Add New Column
-              </button>
-            </div>
-          ) : (
+          {fetch.mainBoard.length == 0 ? null : (
             <div
-              className={`w-[350px] min-w-[250px] h-11/12  rounded-xl flex items-center justify-center text-gray-light font-bold text-xl ml-5 my-10 cursor-pointer hover:text-purple transform transition duration-500 ease-in-out ${
+              className={`lg:w-fit w-[350px] min-w-[250px] min-h-[730px] h-11/12  rounded-xl flex items-center justify-center text-gray-light font-bold text-xl ml-5 my-10 cursor-pointer hover:text-purple transform transition duration-500 ease-in-out ${
                 fetch.darkMode ? 'bg-gray-dark' : 'bg-gray-bright'
               }`}
               onClick={editBoard}

@@ -151,7 +151,7 @@ export default function EditBoard() {
                 <input
                   type='text'
                   placeholder='Enter new name'
-                  className={`w-full p-2 border-[1px] border-gray-bright rounded-md outline-none focus:border-purple ${
+                  className={`w-full p-2 border-[1px] text-[14px] border-gray-bright rounded-md outline-none focus:border-purple ${
                     fetch.darkMode
                       ? `bg-gray-dark ${
                           arrayError[index] ? 'border-red' : 'border-gray-med'

@@ -11,6 +11,7 @@ import {
   EditBoard,
   DeleteBoard,
   DeleteTask,
+  EmptyColumn,
 } from './components'
 
 export default function App() {
@@ -19,13 +20,18 @@ export default function App() {
     <>
       <div
         className={`${
-          fetch.darkMode ? 'bg-black-light' : 'bg-linen'
-        } w-[100vw] `}
+          fetch.darkMode ? 'bg-black-light ' : 'bg-linen'
+        } w-fit min-w-[100vw] h-fit min-h-[100vh]`}
       >
         <Navbar />
         <Sidebar />
         <MainBoard />
       </div>
+      {fetch.mainBoard.length == 0 && (
+        <div className='fixed top-0 z-10'>
+          <EmptyColumn />
+        </div>
+      )}
       <div className='fixed top-0 z-20'>
         <TaskModal />
       </div>

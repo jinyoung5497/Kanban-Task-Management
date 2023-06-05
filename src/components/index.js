@@ -9,6 +9,7 @@ import DeleteBoard from './DeleteBoard'
 import DeleteTask from './DeleteTask'
 import Navbar from './Navbar'
 import BoardUpdate from './BoardUpdate'
+import EmptyColumn from './EmptyColumn'
 
 export {
   Sidebar,
@@ -22,4 +23,5 @@ export {
   DeleteTask,
   Navbar,
   BoardUpdate,
+  EmptyColumn,
 }

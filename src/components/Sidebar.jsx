@@ -122,7 +122,7 @@ export default function Sidebar() {
 
           {/* ---------HIDE SIDEBAR TOGGLE--------- */}
           <div
-            className='flex items-center ml-0 cursor-pointer rounded-r-full mr-5 w-full hover:bg-gray-100 hover:text-purple text-gray-light'
+            className='flex items-center ml-0 cursor-pointer rounded-r-full mr-5 w-full hover:bg-gray-100 hover:text-purple text-gray-light '
             onClick={hideSidebar}
             onMouseEnter={() => setHideSidebarColour('#635FC7')}
             onMouseLeave={() => setHideSidebarColour('#828FA3')}
