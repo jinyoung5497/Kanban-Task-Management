@@ -98,6 +98,7 @@ export default function EditTask() {
   // edit board click outside still updates
   // edit task subtask error doesn't reset
   // edit board subtask error doesn't reset
+
   // mainboard height adjustment
   // tablet mobile responsive design
   // drag and drop tasks

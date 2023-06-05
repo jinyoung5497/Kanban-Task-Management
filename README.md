@@ -23,18 +23,17 @@ Users should be able to:
 - Mark subtasks as complete and move tasks between columns
 - Hide/show the board sidebar
 - Toggle the theme between light/dark modes
-- View the optimal layout for the app depending on their device's screen size
 - Keep track of any changes, even after refreshing the browser
 - This project is a full-stack application
 
 ### Screenshot
 
-![](./screenshot.jpg)
+![Screenshot_1](../assets/Screenshot_1.png)
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: [https://www.frontendmentor.io/solutions/kanban-task-management-web-app-Ny0OoFQH8f](https://www.frontendmentor.io/solutions/kanban-task-management-web-app-Ny0OoFQH8f)
+- Live Site URL: [https://kanban-task-management-4jes1jbc9-jinyoung5497.vercel.app/](https://kanban-task-management-4jes1jbc9-jinyoung5497.vercel.app/)
 
 ### Built with
 
